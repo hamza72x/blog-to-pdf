@@ -1,0 +1,34 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+
+# If you ignore this, then you will face build error in Heroku
+/vendor
+
+/.idea
+.idea
+/.vagrant
+Homestead.json
+Homestead.yaml
+npm-debug.log
+.DS_Store
+gin-bin
+/storage/logs/**
+/storage/databases/default-db.db
+/files/Alafasy_128kbps
+configs.json
+stats.db
+gtaf-backend-go
+
