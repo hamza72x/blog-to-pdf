@@ -10,23 +10,20 @@ var siteMapNotApplicables = []string{
 
 var ArticleWrappers = map[string]string{
 	"alorpothe.wordpress.com":   "#content",
-	"islamshajid.blogspot.com":  "div.post",
-	"amarspondon.wordpress.com": "main#main",
+	"islamshajid.blogspot.com":  ".post",
+	"amarspondon.wordpress.com": "#main",
 }
 
 var DefaultElementsToBeRemoved = []string{
-	// "link[rel=dns-prefetch]",
-	"footer", "aside", ".sidebar", ".search", "form",
-	".respond", ".wpcnt", ".sharing", ".post-sidebar", ".widget", "#jp-post-flair",
-	"#wpcom-block-editor-styles-css",
+	"link[rel=dns-prefetch]",
+	 "footer",
+	 ".respond", ".wpcnt", ".sharing", ".post-sidebar",
+	 "#jp-post-flair",
+	 "#wpcom-block-editor-styles-css",
 }
 var DefaultStringsToBeReplaced = map[string]string{
 	"<script src=\"//stats.wp.com/w.js?60\" type=\"text/javascript\" async=\"\" defer=\"\"></script>": "",
 	",v=\"//\"":                                                                                       ",v=\"https://\"",
-	"href='/": "href='https://",
-	"href=\"/": "href=\"https://",
-	"href='//": "href='https://",
-	"href=\"//": "href=\"https://",
 }
 
 var DivsToBeRemoved = map[string][]string{
@@ -38,14 +35,15 @@ var DivsToBeRemoved = map[string][]string{
 	},
 	"islamshajid.blogspot.com": {
 		".subscribe-section-container",
-		"#PopularPosts1", ".comment-replybox-thread",
+		"#PopularPosts1", ".comment-replybox-thread", ".back-button-container",
+		".footer", "aside", ".sidebar", ".search", "form",
 	},
 	"amarspondon.wordpress.com": {
 		".menu-wrapper", ".post-nav-wrapper",
 	},
 }
 var SpecialStringsReplaceAll = map[string][]map[string]string{
-	"alorpothe.wordpress.com": {
+	"islamshajid.blogspot.com": {
 		{},
 	},
 }

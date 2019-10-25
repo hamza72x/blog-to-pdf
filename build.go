@@ -60,7 +60,7 @@ func buildAllHTMLS() {
 	}
 
 }
-func createHTML(files []HtmlFile, theRange Range, i int) {
+func createHTML(files []HtmlFile, theRange Range, fileNo int) {
 
 	fCount := len(files)
 	firstHtmlFile := files[0]
@@ -80,7 +80,7 @@ func createHTML(files []HtmlFile, theRange Range, i int) {
 	osFile, err := os.Create(htmlFilePath)
 	check(err)
 
-	p(fmt.Sprintf("%d: Generated Combined HTML File: " + htmlFilePath, i + 1))
+	p(fmt.Sprintf("%d: Generated Combined HTML File: " + htmlFilePath, fileNo + 1))
 
 	osFile.WriteString(docHtmlStr)
 
@@ -88,7 +88,7 @@ func createHTML(files []HtmlFile, theRange Range, i int) {
 
 	if generatePdf {
 		htmlToPDF(htmlFilePath,
-			fmt.Sprintf(pdfDir+"/%d-%d_"+DOMAIN+".pdf", theRange.iMin + 1, theRange.iMax + 1), i,
+			fmt.Sprintf(pdfDir+"/%d-%d_"+DOMAIN+".pdf", theRange.iMin + 1, theRange.iMax + 1), fileNo,
 		)
 	}
 }

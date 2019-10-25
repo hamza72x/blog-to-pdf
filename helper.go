@@ -144,3 +144,9 @@ func ContainsStr(array []string, value string) bool {
 	}
 	return false
 }
+
+func tempWrite(path string, str string) {
+	f, _ := os.Create(path)
+	f.WriteString(str)
+	f.Close()
+}

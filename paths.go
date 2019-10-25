@@ -2,12 +2,14 @@ package main
 
 import "os"
 
+const OutputDir = "./blog-to-pdf-output"
+
 func bootPaths() {
 
-	buildDir = "./blog-to-pdf-output/" + DOMAIN + "/build"
-	urlsTxtPath = "./blog-to-pdf-output/" + DOMAIN + "/urls.txt"
-	htmlDir = "./blog-to-pdf-output/" + DOMAIN + "/htmls"
-	pdfDir = "./blog-to-pdf-output/" + DOMAIN + "/pdf"
+	buildDir = OutputDir + "/" + DOMAIN + "/build"
+	urlsTxtPath = OutputDir + "/" + DOMAIN + "/urls.txt"
+	htmlDir = OutputDir + "/" + DOMAIN + "/htmls"
+	pdfDir = OutputDir + "/" + DOMAIN + "/pdf"
 
 	dirs := []string{buildDir, htmlDir, pdfDir}
 
