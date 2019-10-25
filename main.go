@@ -17,6 +17,7 @@ var siteMapFilePath string
 
 var ArticlePerPDF = 10
 var forceFetchHtml bool
+var isTestRun bool
 var pdfPageSize string
 var DOMAIN string
 var isHttps bool

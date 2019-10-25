@@ -21,6 +21,10 @@ func getHtmlFiles() []HtmlFile {
 
 	for i, urlStr := range getUrls() {
 
+		if isTestRun, i == 11 {
+			break
+		}
+
 		path := htmlDir + "/" + removeSpecialChars(urlStr) + ".html"
 
 		if forceFetchHtml || !fileExists(path) {
@@ -83,6 +87,11 @@ func getUrls() []string {
 		if ignoreURL(url.Loc) {
 			continue
 		}
+
+		if isTestRun, i == 11 {
+			break
+		}
+
 		if iCount == i {
 			f.WriteString(url.Loc)
 		} else {

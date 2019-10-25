@@ -12,6 +12,9 @@ func bootFlag() {
 	flag.BoolVar(&forceFetchHtml, "force-html-fetch", false,
 		"Re-fetch htmls from server if it's not already fetched in local directory",
 	)
+	flag.BoolVar(&isTestRun, "is-test-run", false,
+		"if yes, then it will fetch only 10 url to test!",
+	)
 	flag.BoolVar(&forceSiteMapFetch, "force-sitemap-fetch", false,
 		"Re-fetch htmls from server if it's not already fetched in local directory",
 	)
