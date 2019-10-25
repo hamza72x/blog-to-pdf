@@ -32,5 +32,6 @@ Usage of blog-to-pdf:
 
 ## EXAMPLE
 ```
-blog-to-pdf -domain=alorpothe.wordpress.com -article-per-pdf=7
+$ blog-to-pdf -domain=alorpothe.wordpress.com -article-per-pdf=7
+$ blog-to-pdf -domain=bibijaan.com -sitemap-slug=sitemap-posts.xml -generate-pdf=false -article-parent-div=".inner" -force-html-fetch=true
 ```
