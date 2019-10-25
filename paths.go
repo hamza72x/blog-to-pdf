@@ -4,10 +4,10 @@ import "os"
 
 func bootPaths() {
 
-	buildDir = "./blog-to-pdf/" + DOMAIN + "/build"
-	urlsTxtPath = "./blog-to-pdf/" + DOMAIN + "/urls.txt"
-	htmlDir = "./blog-to-pdf/" + DOMAIN + "/htmls"
-	pdfDir = "./blog-to-pdf/" + DOMAIN + "/pdf"
+	buildDir = "./blog-to-pdf-output/" + DOMAIN + "/build"
+	urlsTxtPath = "./blog-to-pdf-output/" + DOMAIN + "/urls.txt"
+	htmlDir = "./blog-to-pdf-output/" + DOMAIN + "/htmls"
+	pdfDir = "./blog-to-pdf-output/" + DOMAIN + "/pdf"
 
 	dirs := []string{buildDir, htmlDir, pdfDir}
 

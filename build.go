@@ -23,16 +23,25 @@ func buildAllHTMLS() {
 
 	var articleRanges []Range
 
-	pdfs := int(math.Floor(float64(totalFiles) / float64(ArticlePerPDF)))
+	totalPdfCount := int(math.Floor(float64(totalFiles) / float64(ArticlePerPDF)))
 	lastIMax := 0
 
-	for i := 0; i < pdfs; i++ {
+	for i := 0; i < totalPdfCount; i++ {
+
 		iMax := (i + 1) * ArticlePerPDF
+		iMin := i * ArticlePerPDF
+
 		if iMax == totalFiles {
 			iMax = iMax - 1
 		}
+		
+		if iMin != 0 {
+			iMin += 1
+		}
+
 		lastIMax = iMax
-		articleRanges = append(articleRanges, Range{iMin: i * ArticlePerPDF, iMax: iMax})
+
+		articleRanges = append(articleRanges, Range{iMin: iMin, iMax: iMax})
 	}
 
 	if totalFiles-1 > lastIMax {
@@ -40,6 +49,7 @@ func buildAllHTMLS() {
 	}
 
 	// fmt.Printf("articleRanges: %+v", articleRanges)
+	// panic("END")
 
 	for i, theRange := range articleRanges {
 		var pdfFiles []HtmlFile
@@ -65,7 +75,7 @@ func createHTML(files []HtmlFile, theRange Range, i int) {
 	docHtmlStr, err := doc.Selection.Html()
 	check(err)
 
-	htmlFilePath := fmt.Sprintf(buildDir+"/%d-%d_"+DOMAIN+".html", theRange.iMin, theRange.iMax)
+	htmlFilePath := fmt.Sprintf(buildDir+"/%d-%d_"+DOMAIN+".html", theRange.iMin + 1, theRange.iMax + 1)
 
 	osFile, err := os.Create(htmlFilePath)
 	check(err)
@@ -78,14 +88,14 @@ func createHTML(files []HtmlFile, theRange Range, i int) {
 
 	if generatePdf {
 		htmlToPDF(htmlFilePath,
-			fmt.Sprintf(pdfDir+"/%d-%d_"+DOMAIN+".pdf", theRange.iMin, theRange.iMax),
+			fmt.Sprintf(pdfDir+"/%d-%d_"+DOMAIN+".pdf", theRange.iMin + 1, theRange.iMax + 1), i,
 		)
 	}
 }
 
-func htmlToPDF(htmlFilePath string, pdfFilePath string) {
+func htmlToPDF(htmlFilePath string, pdfFilePath string, i int) {
 
-	p("Creating PDF File!")
+	p(fmt.Sprintf("%d: Creating PDF File!", i + 1))
 
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	check(err)
@@ -109,7 +119,7 @@ func htmlToPDF(htmlFilePath string, pdfFilePath string) {
 	err = pdfg.WriteFile(pdfFilePath)
 	check(err)
 
-	p(fmt.Sprintf("Generated PDF size %vkB: %v\n", len(pdfg.Bytes())/1024, pdfFilePath))
+	p(fmt.Sprintf("%d: Generated PDF size %vkB: %v\n", i + 1, len(pdfg.Bytes())/1024, pdfFilePath))
 
 	if pdfg.Buffer().Len() != len(pdfg.Bytes()) {
 		fmt.Println("Buffersize not equal: " + pdfFilePath)

@@ -15,8 +15,8 @@
 /storage/*.key
 
 blog-to-pdf
-/blog-to-pdf
-blog-to-pdf/
+/blog-to-pdf-output
+blog-to-pdf-output/
 # If you ignore this, then you will face build error in Heroku
 /vendor
 storage/
