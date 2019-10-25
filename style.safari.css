@@ -1,0 +1,7 @@
+.cs-rating .pd-rating, .entry-format, .rating-star-icon {
+    display: none !important;
+}
+body {
+    font-family: "Kohinoor Bangla", Kalpurush, sans-serif;
+    font-size: 16px;
+}
