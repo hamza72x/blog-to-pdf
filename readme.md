@@ -43,14 +43,17 @@ Usage of blog-to-pdf:
     	Margin around the contents of PDF (default 3)
 
   -pdf-size string
-    	The size of output PDF (default "A7")
+    	The size of output PDF (default "`A7`")
 
   -sitemap-slug string
-    	Sitemap slug, example: sitemap.xml (default "sitemap.xml")
+    	Sitemap slug, example: sitemap.xml (default "`sitemap.xml`")
 ```
 
 ## EXAMPLE
+
 ```
 $ blog-to-pdf -domain=alorpothe.wordpress.com -article-per-pdf=7
+$ blog-to-pdf -domain=amarspondon.wordpress.com
 $ blog-to-pdf -domain=bibijaan.com -sitemap-slug=sitemap-posts.xml -generate-pdf=false -article-parent-div=".inner" -force-html-fetch=true
 ```
+
