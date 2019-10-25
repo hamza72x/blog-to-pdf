@@ -16,7 +16,7 @@ func removeTags(htmlBytes []byte) string {
 		panic(err)
 	}
 
-	tags, ok := SiteBasedTags[DOMAIN]
+	tags, ok := DivsToBeRemoved[DOMAIN]
 
 	if ok {
 		for _, tag := range tags {
@@ -30,7 +30,7 @@ func removeTags(htmlBytes []byte) string {
 		panic(err)
 	}
 
-	specialReplaces, ok2 := SpecialReplaceAll[DOMAIN]
+	specialReplaces, ok2 := SpecialStringsReplaceAll[DOMAIN]
 
 	if ok2 {
 		for _, replaceMaps := range specialReplaces {

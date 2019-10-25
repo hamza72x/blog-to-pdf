@@ -16,7 +16,7 @@ var ArticleWrappers = map[string]string{
 	"amarspondon.wordpress.com": "main#main",
 }
 
-var SiteBasedTags = map[string][]string{
+var DivsToBeRemoved = map[string][]string{
 	"alorpothe.wordpress.com": {"div#secondary", "div.menu-search", "nav#nav-single",
 		"footer#colophon", "div.widget", "div#fb-root", "div#actionbar",
 		"form", "h3#reply-title", "div#jp-post-flair", "div#header-img", ".cs-rating .pd-rating",
@@ -31,7 +31,7 @@ var SiteBasedTags = map[string][]string{
 		".menu-wrapper", ".respond", "aside", "footer", ".wpcnt", ".post-nav-wrapper", "#jp-post-flair",
 	},
 }
-var SpecialReplaceAll = map[string][]map[string]string{
+var SpecialStringsReplaceAll = map[string][]map[string]string{
 	"alorpothe.wordpress.com": {
 		{"<script src=\"//stats.wp.com/w.js?60\" type=\"text/javascript\" async=\"\" defer=\"\"></script>": ""},
 		{",v=\"//\"": ",v=\"https://\""},
