@@ -10,7 +10,6 @@ import (
 	"io/ioutil"
 )
 
-
 type Range struct {
 	iMin int
 	iMax int

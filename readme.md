@@ -1,3 +1,6 @@
+
+
+
 ## INSTALL
 
 ```
@@ -6,6 +9,7 @@ go get gitlab.com/thejini3/blog-to-pdf
 cd $GOPATH/src/gitlab.com/thejini3/blog-to-pdf
 go install
 ```
+## Check `constants.go` file according to your needs
 
 ## USAGE
 ```

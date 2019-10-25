@@ -6,8 +6,6 @@ import (
 	"strings"
 )
 
-
-
 func removeTags(htmlBytes []byte) string {
 
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(htmlBytes))

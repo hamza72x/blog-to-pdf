@@ -4,7 +4,6 @@ import (
 	"fmt"
 )
 
-
 var protoCol = "https://"
 
 var buildDir string
