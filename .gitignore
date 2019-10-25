@@ -18,8 +18,8 @@ blog-to-pdf
 
 # If you ignore this, then you will face build error in Heroku
 /vendor
-alorpothe.wordpress.com/
-/alorpothe.wordpress.com
+storage/
+/storage
 
 /.idea
 .idea

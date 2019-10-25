@@ -15,7 +15,7 @@ func bootFlag() {
 	flag.BoolVar(&isTestRun, "is-test-run", false,
 		"if yes, then it will fetch only 10 url to test!",
 	)
-	flag.BoolVar(&forceSiteMapFetch, "force-sitemap-fetch", false,
+	flag.BoolVar(&forceUrlsFetch, "force-urls-fetch", false,
 		"Re-fetch htmls from server if it's not already fetched in local directory",
 	)
 	flag.StringVar(&DOMAIN, "domain", "",
@@ -23,6 +23,9 @@ func bootFlag() {
 	)
 	flag.BoolVar(&isHttps, "https", true,
 		"https or not",
+	)
+	flag.BoolVar(&generatePdf, "generate-pdf", true,
+		"Generate pdf or not, then just html will be created!",
 	)
 	flag.IntVar(&ArticlePerPDF, "article-per-pdf", 10,
 		"The number of articles per pdf",
@@ -47,13 +50,16 @@ func bootFlag() {
 	SiteURL = protoCol + DOMAIN
 	SiteMapURL = SiteURL + "/sitemap.xml"
 
-	fmt.Printf("Current Configs - \n\n")
-	fmt.Printf("article-per-pdf: %v\n", ArticlePerPDF)
-	fmt.Println("DOMAIN: " + DOMAIN)
-	fmt.Printf("force-html-fetch: %v\n", forceFetchHtml)
-	fmt.Printf("force-sitemap-fetch: %v\n", forceSiteMapFetch)
-	fmt.Printf("isHttps: %v\n", isHttps)
-	fmt.Printf("SiteURL: %v\n", SiteURL)
-	fmt.Printf("SiteMapURL: %v\n", SiteMapURL)
+	p("Current Configs")
+	fmt.Printf("-article-per-pdf: %v\n", ArticlePerPDF)
+	fmt.Println("-domain: " + DOMAIN)
+	fmt.Printf("-force-html-fetch: %v\n", forceFetchHtml)
+	fmt.Printf("-force-urls-fetch: %v\n", forceUrlsFetch)
+	fmt.Printf("-generate-pdf: %v\n", generatePdf)
+	fmt.Printf("-https: %v\n", isHttps)
 
+	fmt.Printf("SiteURL: %v\n", SiteURL)
+	if ContainsStr(siteMapSites, DOMAIN) {
+		fmt.Printf("SiteMapURL: %v\n", SiteMapURL)
+	}
 }

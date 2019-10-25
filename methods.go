@@ -59,14 +59,36 @@ func getUrls() []string {
 	var urls []string
 	// localSiteMap := getLocalSiteMapUrlsFilePath()
 
-	if !forceSiteMapFetch {
-		if fileExists(siteMapFilePath) {
+	if !forceUrlsFetch {
+		if fileExists(urlsTxtPath) {
 			return strings.Split(
-				strings.ReplaceAll(string(getFileContents(siteMapFilePath)), " ", ""),
+				strings.ReplaceAll(string(getFileContents(urlsTxtPath)), " ", ""),
 				"\n",
 			)
 		}
 	}
+
+	f, err := os.Create(urlsTxtPath)
+
+	if err != nil {
+		fmt.Println("Error os.Create: "+err.Error(), urlsTxtPath)
+	}
+
+	if ContainsStr(siteMapSites, DOMAIN) {
+		f.WriteString(getUrlsFromSiteMap())
+	} else {
+		// have to get from feed I guess
+		urlContent := getURLContent(SiteURL + "/feed")
+		p(string(urlContent))
+		panic("NO SITE MAP DUDE!")
+	}
+
+	f.Close()
+
+	return urls
+}
+
+func getUrlsFromSiteMap() (allUrls string) {
 
 	smap, err := sitemap.Get(SiteMapURL, nil)
 
@@ -74,10 +96,8 @@ func getUrls() []string {
 		fmt.Println("Site map get error: " + err.Error())
 	}
 
-	f, err := os.Create(siteMapFilePath)
-
 	if err != nil {
-		fmt.Println("Error os.Create: "+err.Error(), siteMapFilePath)
+		fmt.Println("Error os.Create: "+err.Error(), urlsTxtPath)
 	}
 
 	var iCount = len(smap.URLS) - 1
@@ -93,16 +113,13 @@ func getUrls() []string {
 		}
 
 		if iCount == i {
-			f.WriteString(url.Loc)
+			allUrls += url.Loc
 		} else {
-			f.WriteString(url.Loc + "\n")
+			allUrls += url.Loc + "\n"
 		}
-		urls = append(urls, url.Loc)
+
 	}
-
-	f.Close()
-
-	return urls
+	return
 }
 
 func ignoreURL(urlStr string) bool {

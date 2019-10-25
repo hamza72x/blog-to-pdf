@@ -10,12 +10,17 @@ import (
 	"io/ioutil"
 )
 
+var ArticleWrappers = map[string]string{
+	"alorpothe.wordpress.com":  "#content",
+	"islamshajid.blogspot.com": "div.post",
+}
+
 type Range struct {
 	iMin int
 	iMax int
 }
 
-func generateAllPdf() {
+func buildAllHTMLS() {
 
 	files := getHtmlFiles()
 
@@ -46,11 +51,11 @@ func generateAllPdf() {
 		for i := theRange.iMin; i <= theRange.iMax; i++ {
 			pdfFiles = append(pdfFiles, files[i])
 		}
-		createPDF(pdfFiles, theRange)
+		createHTML(pdfFiles, theRange)
 	}
 
 }
-func createPDF(files []HtmlFile, theRange Range) {
+func createHTML(files []HtmlFile, theRange Range) {
 
 	fCount := len(files)
 	firstHtmlFile := files[0]
@@ -59,7 +64,7 @@ func createPDF(files []HtmlFile, theRange Range) {
 	check(err)
 
 	for i := 1; i < fCount; i++ {
-		doc.Find("#content").AppendHtml(getContent(files[i]))
+		doc.Find(getArticleWrapper()).AppendHtml(getContent(files[i]))
 	}
 
 	docHtmlStr, err := doc.Selection.Html()
@@ -76,9 +81,11 @@ func createPDF(files []HtmlFile, theRange Range) {
 
 	osFile.Close()
 
-	htmlToPDF(htmlFilePath,
-		fmt.Sprintf(pdfDir+"/%d-%d_"+DOMAIN+".pdf", theRange.iMin, theRange.iMax),
-	)
+	if generatePdf {
+		htmlToPDF(htmlFilePath,
+			fmt.Sprintf(pdfDir+"/%d-%d_"+DOMAIN+".pdf", theRange.iMin, theRange.iMax),
+		)
+	}
 }
 
 func htmlToPDF(htmlFilePath string, pdfFilePath string) {
@@ -100,7 +107,9 @@ func htmlToPDF(htmlFilePath string, pdfFilePath string) {
 	pdfg.AddPage(wkhtmltopdf.NewPageReader(bytes.NewReader(htmlfile)))
 
 	err = pdfg.Create()
-	// check(err)
+	if err != nil {
+		p("Error while pdfg.Create: " + err.Error())
+	}
 
 	err = pdfg.WriteFile(pdfFilePath)
 	check(err)
@@ -111,3 +120,5 @@ func htmlToPDF(htmlFilePath string, pdfFilePath string) {
 		fmt.Println("Buffersize not equal: " + pdfFilePath)
 	}
 }
+
+

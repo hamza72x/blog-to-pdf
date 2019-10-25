@@ -4,10 +4,10 @@ import "os"
 
 func bootPaths() {
 
-	buildDir = "./" + DOMAIN + "/build"
-	siteMapFilePath = "./" + DOMAIN + "/sitemap.txt"
-	htmlDir = "./" + DOMAIN + "/htmls"
-	pdfDir = "./" + DOMAIN + "/pdf"
+	buildDir = "./storage/" + DOMAIN + "/build"
+	urlsTxtPath = "./storage/" + DOMAIN + "/urls.txt"
+	htmlDir = "./storage/" + DOMAIN + "/htmls"
+	pdfDir = "./storage/" + DOMAIN + "/pdf"
 
 	dirs := []string{buildDir, htmlDir, pdfDir}
 

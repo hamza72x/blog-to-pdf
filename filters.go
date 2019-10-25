@@ -13,6 +13,10 @@ var SiteBasedTags = map[string][]string{
 		"div.wpcnt", "h3#entry-format", ".rating-star-icon", "article.page", "link[rel=dns-prefetch]",
 		"#wpcom-block-editor-styles-css",
 	},
+	"islamshajid.blogspot.com": {
+		"aside", ".post-sidebar", ".subscribe-section-container", ".search",
+		"#PopularPosts1", "footer", ".comment-replybox-thread",
+	},
 }
 var SpecialReplaceAll = map[string][]map[string]string{
 	"alorpothe.wordpress.com": {
