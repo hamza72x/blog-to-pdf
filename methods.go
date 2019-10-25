@@ -21,7 +21,7 @@ func getHtmlFiles() []HtmlFile {
 
 	for i, urlStr := range getUrls() {
 
-		if isTestRun, i == 11 {
+		if isTestRun && i == 11 {
 			break
 		}
 
@@ -88,7 +88,7 @@ func getUrls() []string {
 			continue
 		}
 
-		if isTestRun, i == 11 {
+		if isTestRun && i == 11 {
 			break
 		}
 
