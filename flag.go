@@ -36,10 +36,10 @@ func bootFlag() {
 	}
 
 	if !isHttps {
-		protocol = "http://"
+		protoCol = "http://"
 	}
 
-	SiteURL = protocol + DOMAIN
+	SiteURL = protoCol + DOMAIN
 	SiteMapURL = SiteURL + "/sitemap.xml"
 
 	fmt.Printf("Current Configs - \n\n")

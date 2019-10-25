@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"github.com/PuerkitoBio/goquery"
-	"bytes"
 	"sort"
 	"gitlab.com/thejini3/blog-to-pdf/sitemap"
 )
@@ -47,7 +45,7 @@ func getHtmlFiles() []HtmlFile {
 		htmlFiles = append(htmlFiles, HtmlFile{
 			Name:      removeSpecialChars(urlStr),
 			LocalPath: path,
-			Content:   getFileContentAsString(path),
+			Content:   removeTags(getFileContents(path)),
 			URL:       urlStr,
 		})
 
@@ -63,7 +61,10 @@ func getUrls() []string {
 
 	if !forceSiteMapFetch {
 		if fileExists(siteMapFilePath) {
-			return strings.Split(getFileContentAsString(strings.ReplaceAll(siteMapFilePath, " ", "")), "\n")
+			return strings.Split(
+				strings.ReplaceAll(string(getFileContents(siteMapFilePath)), " ", ""),
+				"\n",
+			)
 		}
 	}
 
@@ -101,36 +102,6 @@ func getUrls() []string {
 
 func ignoreURL(urlStr string) bool {
 	return (urlStr == SiteURL) || (urlStr == SiteURL+"/")
-}
-
-func removeTags(htmlBytes []byte) string {
-
-	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(htmlBytes))
-
-	if err != nil {
-		panic(err)
-	}
-
-	tags, ok := SiteBasedTags[DOMAIN]
-
-	if ok {
-		for _, tag := range tags {
-			doc.Find(tag).Remove()
-		}
-	}
-
-	//doc.Find("head").Each(func(i int, s *goquery.Selection) {
-	//	s.Append("<style> body p { font-family: \"Kohinoor Bangla\", serif !important; font-size: 20px !important; } </style>")
-	//})
-
-	htmlStr, err := doc.Html()
-
-	if err != nil {
-		panic(err)
-	}
-
-	return htmlStr
-
 }
 
 func getSortedSiteMapURL(urls []sitemap.URL) []sitemap.URL {

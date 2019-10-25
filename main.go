@@ -10,11 +10,11 @@ var SiteBasedTags = map[string][]string{
 	"alorpothe.wordpress.com": {"div#secondary", "div.menu-search", "nav#nav-single",
 		"footer#colophon", "div.widget", "div#fb-root", "div#actionbar",
 		"form", "h3#reply-title", "div#jp-post-flair", "div#header-img", ".cs-rating .pd-rating",
-		"div.wpcnt", "h3#entry-format", ".rating-star-icon",
+		"div.wpcnt", "h3#entry-format", ".rating-star-icon", "article.page",
 	},
 }
 
-var protocol = "https://"
+var protoCol = "https://"
 
 var buildDir string
 var htmlDir string
@@ -32,12 +32,9 @@ func main() {
 
 	bootFlag()
 	bootPaths()
-
 	generateAllPdf()
-
 	os.Exit(0)
 }
-
 
 func check(err error) {
 	if err != nil {

@@ -45,7 +45,8 @@ func getURLContent(urlStr string) []byte {
 	return htmlBytes
 }
 
-func getFileContentAsString(filePath string) string {
+
+func getFileContents(filePath string) []byte {
 
 	file, err := os.Open(filePath)
 
@@ -60,9 +61,8 @@ func getFileContentAsString(filePath string) string {
 		fmt.Println("Error ioutil.ReadAll: " + filePath)
 	}
 
-	return string(b)
+	return b
 }
-
 func fileExists(filename string) bool {
 
 	info, err := os.Stat(filename)
