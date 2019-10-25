@@ -17,7 +17,7 @@ var forceFetchHtml bool
 var isTestRun bool
 var generatePdf bool
 var pdfPageSize string
-var DOMAIN string
+var DOMAIN = ""
 var isHttps bool
 var SiteURL string
 var forceUrlsFetch bool

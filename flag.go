@@ -18,7 +18,7 @@ func bootFlag() {
 	flag.BoolVar(&forceUrlsFetch, "force-urls-fetch", false,
 		"Re-fetch htmls from server if it's not already fetched in local directory",
 	)
-	flag.StringVar(&DOMAIN, "domain", "",
+	flag.StringVar(&DOMAIN, "domain", "-",
 		"(Required) Domain of the site, Ex: alorpothe.wordpress.com",
 	)
 	flag.BoolVar(&isHttps, "https", true,
@@ -38,13 +38,13 @@ func bootFlag() {
 	)
 	flag.Parse()
 
-	DOMAIN = strings.ReplaceAll(DOMAIN, "/", "")
-
 	if checkDomain(DOMAIN) != nil {
-		fmt.Println("Wrong, domain name: " + checkDomain(DOMAIN).Error())
+		p("Wrong, domain name: " + checkDomain(DOMAIN).Error())
 		flag.Usage()
 		os.Exit(0)
 	}
+
+	DOMAIN = strings.ReplaceAll(DOMAIN, "/", "")
 
 	if !isHttps {
 		protoCol = "http://"
