@@ -74,4 +74,8 @@ func createPDF(files []HtmlFile, theRange Range) {
 	osFile.WriteString(docHtmlStr)
 
 	osFile.Close()
+
+	// exec
+	// 	wkhtmltopdf -L 2mm -R 2mm -T 5mm -B 5mm -s A7 0-7_alorpothe.wordpress.com.html test.pdf
+
 }
