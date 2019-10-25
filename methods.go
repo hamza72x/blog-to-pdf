@@ -74,7 +74,7 @@ func getUrls() []string {
 		fmt.Println("Error os.Create: "+err.Error(), urlsTxtPath)
 	}
 
-	if ContainsStr(siteMapSites, DOMAIN) {
+	if !ContainsStr(siteMapNotApplicables, DOMAIN) {
 		f.WriteString(getUrlsFromSiteMap())
 	} else {
 		// have to get from feed I guess

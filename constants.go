@@ -4,10 +4,8 @@ const UserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) Appl
 
 // go build && ./blog-to-pdf -domain=islamshajid.blogspot.com -force-urls-fetch=true -generate-pdf=false
 
-var siteMapSites = []string{
-	"alorpothe.wordpress.com",
-	"islamshajid.blogspot.com",
-	"amarspondon.wordpress.com",
+var siteMapNotApplicables = []string{
+	"www.muslimmedia.info",
 }
 
 var ArticleWrappers = map[string]string{

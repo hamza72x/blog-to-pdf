@@ -64,7 +64,7 @@ func bootFlag() {
 
 	fmt.Printf("SiteURL: %v\n", SiteURL)
 
-	if ContainsStr(siteMapSites, DOMAIN) {
+	if !ContainsStr(siteMapNotApplicables, DOMAIN) {
 		fmt.Printf("SiteMapURL: %v\n", SiteMapURL)
 	}
 }
