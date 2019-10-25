@@ -131,9 +131,14 @@ func checkDomain(name string) error {
 }
 
 func p(str string) {
-	fmt.Println("--------------------------------------------")
+	var line = ""
+	for i := 0; i < len(str)+5; i++ {
+		line += "-"
+		fmt.Print("-")
+	}
+	fmt.Print("\n| ")
 	fmt.Println(str)
-	fmt.Println("--------------------------------------------")
+	fmt.Println(line)
 }
 
 func ContainsStr(array []string, value string) bool {

@@ -15,13 +15,18 @@ var ArticleWrappers = map[string]string{
 }
 
 var DefaultElementsToBeRemoved = []string{
-	"link[rel=dns-prefetch]", "footer", "aside", ".sidebar", ".search", "form",
+	// "link[rel=dns-prefetch]",
+	"footer", "aside", ".sidebar", ".search", "form",
 	".respond", ".wpcnt", ".sharing", ".post-sidebar", ".widget", "#jp-post-flair",
 	"#wpcom-block-editor-styles-css",
 }
 var DefaultStringsToBeReplaced = map[string]string{
 	"<script src=\"//stats.wp.com/w.js?60\" type=\"text/javascript\" async=\"\" defer=\"\"></script>": "",
 	",v=\"//\"":                                                                                       ",v=\"https://\"",
+	"href='/": "href='https://",
+	"href=\"/": "href=\"https://",
+	"href='//": "href='https://",
+	"href=\"//": "href=\"https://",
 }
 
 var DivsToBeRemoved = map[string][]string{

@@ -24,9 +24,11 @@ func getContent(htmlFile HtmlFile) string {
 }
 
 func getArticleWrapper() string {
-	div, ok := ArticleWrappers[DOMAIN]
-	if ok {
-		return div
+	if articleParentDiv == "body" {
+		div, ok := ArticleWrappers[DOMAIN]
+		if ok {
+			return div
+		}
 	}
-	return "body"
+	return articleParentDiv
 }

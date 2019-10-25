@@ -18,8 +18,9 @@ type HtmlFile struct {
 func getHtmlFiles() []HtmlFile {
 
 	var htmlFiles []HtmlFile
+	var urls = getUrls()
 
-	for i, urlStr := range getUrls() {
+	for i, urlStr := range urls {
 
 		if isTestRun && i == 11 {
 			break
@@ -59,16 +60,15 @@ func getUrls() []string {
 	var urls []string
 	// localSiteMap := getLocalSiteMapUrlsFilePath()
 
-	if !forceUrlsFetch {
-		if fileExists(urlsTxtPath) {
-			return strings.Split(
-				strings.ReplaceAll(string(getFileContents(urlsTxtPath)), " ", ""),
-				"\n",
-			)
-		}
+	if !forceUrlsFetch && fileExists(urlsTxtPath) {
+		return strings.Split(
+			strings.ReplaceAll(string(getFileContents(urlsTxtPath)), " ", ""),
+			"\n",
+		)
 	}
 
 	f, err := os.Create(urlsTxtPath)
+	defer f.Close()
 
 	if err != nil {
 		fmt.Println("Error os.Create: "+err.Error(), urlsTxtPath)
@@ -83,12 +83,11 @@ func getUrls() []string {
 		panic("NO SITE MAP DUDE!")
 	}
 
-	f.Close()
-
 	return urls
 }
 
-func getUrlsFromSiteMap() (allUrls string) {
+func getUrlsFromSiteMap() string {
+	var allUrls = ""
 
 	smap, err := sitemap.Get(SiteMapURL, nil)
 
@@ -119,7 +118,7 @@ func getUrlsFromSiteMap() (allUrls string) {
 		}
 
 	}
-	return
+	return allUrls
 }
 
 func ignoreURL(urlStr string) bool {

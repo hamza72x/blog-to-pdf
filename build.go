@@ -41,16 +41,16 @@ func buildAllHTMLS() {
 
 	// fmt.Printf("articleRanges: %+v", articleRanges)
 
-	for _, theRange := range articleRanges {
+	for i, theRange := range articleRanges {
 		var pdfFiles []HtmlFile
 		for i := theRange.iMin; i <= theRange.iMax; i++ {
 			pdfFiles = append(pdfFiles, files[i])
 		}
-		createHTML(pdfFiles, theRange)
+		createHTML(pdfFiles, theRange, i)
 	}
 
 }
-func createHTML(files []HtmlFile, theRange Range) {
+func createHTML(files []HtmlFile, theRange Range, i int) {
 
 	fCount := len(files)
 	firstHtmlFile := files[0]
@@ -70,7 +70,7 @@ func createHTML(files []HtmlFile, theRange Range) {
 	osFile, err := os.Create(htmlFilePath)
 	check(err)
 
-	p("Generated Combined HTML File: " + htmlFilePath)
+	p(fmt.Sprintf("%d: Generated Combined HTML File: " + htmlFilePath, i + 1))
 
 	osFile.WriteString(docHtmlStr)
 

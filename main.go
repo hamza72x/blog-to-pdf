@@ -10,15 +10,6 @@ var buildDir string
 var pdfDir string
 var htmlDir string
 var urlsTxtPath string
-
-var ArticlePerPDF = 10
-var pdfMargin = 5
-var forceFetchHtml bool
-var isTestRun bool
-var generatePdf bool
-var pdfPageSize string
-var DOMAIN = ""
-var isHttps bool
 var SiteURL string
 var forceUrlsFetch bool
 var SiteMapURL string
@@ -28,10 +19,9 @@ func main() {
 	bootFlag()
 	bootPaths()
 
-	p("booted")
+	p("IF app stops here, then just run it again!")
 
 	buildAllHTMLS()
-
 }
 
 func check(err error) {
