@@ -30,6 +30,9 @@ func bootFlag() {
 	flag.IntVar(&ArticlePerPDF, "article-per-pdf", 10,
 		"The number of articles per pdf",
 	)
+	flag.IntVar(&pdfMargin, "pdf-margin", 3,
+		"Margin around the contents of PDF",
+	)
 	flag.StringVar(&pdfPageSize, "pdf-size", "A7",
 		"The size of output PDF",
 	)
@@ -57,8 +60,10 @@ func bootFlag() {
 	fmt.Printf("-force-urls-fetch: %v\n", forceUrlsFetch)
 	fmt.Printf("-generate-pdf: %v\n", generatePdf)
 	fmt.Printf("-https: %v\n", isHttps)
+	fmt.Printf("-pdf-margin: %v\n", pdfMargin)
 
 	fmt.Printf("SiteURL: %v\n", SiteURL)
+
 	if ContainsStr(siteMapSites, DOMAIN) {
 		fmt.Printf("SiteMapURL: %v\n", SiteMapURL)
 	}

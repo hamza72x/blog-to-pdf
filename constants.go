@@ -16,24 +16,33 @@ var ArticleWrappers = map[string]string{
 	"amarspondon.wordpress.com": "main#main",
 }
 
+var DefaultElementsToBeRemoved = []string{
+	"link[rel=dns-prefetch]", "footer", "aside", ".sidebar", ".search", "form",
+	".respond", ".wpcnt", ".sharing", ".post-sidebar", ".widget", "#jp-post-flair",
+	"#wpcom-block-editor-styles-css",
+}
+var DefaultStringsToBeReplaced = map[string]string{
+	"<script src=\"//stats.wp.com/w.js?60\" type=\"text/javascript\" async=\"\" defer=\"\"></script>": "",
+	",v=\"//\"":                                                                                       ",v=\"https://\"",
+}
+
 var DivsToBeRemoved = map[string][]string{
-	"alorpothe.wordpress.com": {"div#secondary", "div.menu-search", "nav#nav-single",
-		"footer#colophon", "div.widget", "div#fb-root", "div#actionbar",
-		"form", "h3#reply-title", "div#jp-post-flair", "div#header-img", ".cs-rating .pd-rating",
-		"div.wpcnt", "h3#entry-format", ".rating-star-icon", "article.page", "link[rel=dns-prefetch]",
-		"#wpcom-block-editor-styles-css",
+	"alorpothe.wordpress.com": {
+		"div#secondary", "div.menu-search", "nav#nav-single",
+		"footer#colophon", "div#fb-root", "div#actionbar",
+		"h3#reply-title", "div#header-img", ".cs-rating .pd-rating",
+		"h3#entry-format", ".rating-star-icon", "article.page",
 	},
 	"islamshajid.blogspot.com": {
-		"aside", ".post-sidebar", ".subscribe-section-container", ".search",
-		"#PopularPosts1", "footer", ".comment-replybox-thread", ".sharing",
+		".subscribe-section-container",
+		"#PopularPosts1", ".comment-replybox-thread",
 	},
 	"amarspondon.wordpress.com": {
-		".menu-wrapper", ".respond", "aside", "footer", ".wpcnt", ".post-nav-wrapper", "#jp-post-flair",
+		".menu-wrapper", ".post-nav-wrapper",
 	},
 }
 var SpecialStringsReplaceAll = map[string][]map[string]string{
 	"alorpothe.wordpress.com": {
-		{"<script src=\"//stats.wp.com/w.js?60\" type=\"text/javascript\" async=\"\" defer=\"\"></script>": ""},
-		{",v=\"//\"": ",v=\"https://\""},
+		{},
 	},
 }

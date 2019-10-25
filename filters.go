@@ -14,6 +14,10 @@ func removeTags(htmlBytes []byte) string {
 		panic(err)
 	}
 
+	for _, element := range DefaultElementsToBeRemoved {
+		doc.Find(element).Remove()
+	}
+
 	tags, ok := DivsToBeRemoved[DOMAIN]
 
 	if ok {
@@ -26,6 +30,10 @@ func removeTags(htmlBytes []byte) string {
 
 	if err != nil {
 		panic(err)
+	}
+
+	for k, v := range DefaultStringsToBeReplaced {
+		htmlStr = strings.ReplaceAll(htmlStr, k, v)
 	}
 
 	specialReplaces, ok2 := SpecialStringsReplaceAll[DOMAIN]

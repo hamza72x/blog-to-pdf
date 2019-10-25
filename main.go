@@ -12,6 +12,7 @@ var htmlDir string
 var urlsTxtPath string
 
 var ArticlePerPDF = 10
+var pdfMargin = 5
 var forceFetchHtml bool
 var isTestRun bool
 var generatePdf bool

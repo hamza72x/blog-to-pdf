@@ -94,10 +94,10 @@ func htmlToPDF(htmlFilePath string, pdfFilePath string) {
 	check(err)
 
 	pdfg.PageSize.Set(pdfPageSize)
-	pdfg.MarginLeft.Set(2)
-	pdfg.MarginRight.Set(2)
-	pdfg.MarginTop.Set(2)
-	pdfg.MarginBottom.Set(2)
+	pdfg.MarginLeft.Set(uint(pdfMargin))
+	pdfg.MarginRight.Set(uint(pdfMargin))
+	pdfg.MarginTop.Set(uint(pdfMargin))
+	pdfg.MarginBottom.Set(uint(pdfMargin))
 
 	pdfg.AddPage(wkhtmltopdf.NewPageReader(bytes.NewReader(htmlfile)))
 
