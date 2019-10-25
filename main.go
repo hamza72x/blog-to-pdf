@@ -32,6 +32,7 @@ func main() {
 
 	bootFlag()
 	bootPaths()
+
 	generateAllPdf()
 
 	os.Exit(0)

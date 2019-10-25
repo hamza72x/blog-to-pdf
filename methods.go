@@ -1,15 +1,13 @@
 package main
 
 import (
-	"github.com/yterajima/go-sitemap"
-	"io/ioutil"
 	"fmt"
 	"os"
 	"strings"
-	"net/http"
-	"time"
 	"github.com/PuerkitoBio/goquery"
 	"bytes"
+	"sort"
+	"gitlab.com/thejini3/blog-to-pdf/sitemap"
 )
 
 type HtmlFile struct {
@@ -19,15 +17,15 @@ type HtmlFile struct {
 	URL       string
 }
 
-func getHtmlFiles(forceFetchHTMLS bool, forceFetchSiteMap bool) []HtmlFile {
+func getHtmlFiles() []HtmlFile {
 
 	var htmlFiles []HtmlFile
 
-	for i, urlStr := range getUrls(false) {
+	for i, urlStr := range getUrls() {
 
 		path := htmlDir + "/" + removeSpecialChars(urlStr) + ".html"
 
-		if forceFetchHTMLS || !fileExists(path) {
+		if forceFetchHtml || !fileExists(path) {
 
 			osFile, err := os.Create(path)
 
@@ -58,12 +56,12 @@ func getHtmlFiles(forceFetchHTMLS bool, forceFetchSiteMap bool) []HtmlFile {
 	return htmlFiles
 }
 
-func getUrls(forceFetchSiteMap bool) []string {
+func getUrls() []string {
 
 	var urls []string
 	// localSiteMap := getLocalSiteMapUrlsFilePath()
 
-	if !forceFetchSiteMap {
+	if !forceSiteMapFetch {
 		if fileExists(siteMapFilePath) {
 			return strings.Split(getFileContentAsString(strings.ReplaceAll(siteMapFilePath, " ", "")), "\n")
 		}
@@ -81,9 +79,12 @@ func getUrls(forceFetchSiteMap bool) []string {
 		fmt.Println("Error os.Create: "+err.Error(), siteMapFilePath)
 	}
 
-	var iCount = len(smap.URL) - 1
+	var iCount = len(smap.URLS) - 1
 
-	for i, url := range smap.URL {
+	for i, url := range getSortedSiteMapURL(smap.URLS) {
+
+		fmt.Println("lastMod: " + url.LastMod)
+
 		if ignoreURL(url.Loc) {
 			continue
 		}
@@ -102,76 +103,6 @@ func getUrls(forceFetchSiteMap bool) []string {
 
 func ignoreURL(urlStr string) bool {
 	return (urlStr == SiteURL) || (urlStr == SiteURL+"/")
-}
-
-func getFileContentAsString(filePath string) string {
-
-	file, err := os.Open(filePath)
-
-	if err != nil {
-		fmt.Println("Error reading file: " + filePath)
-	}
-	defer file.Close()
-
-	b, err := ioutil.ReadAll(file)
-
-	if err != nil {
-		fmt.Println("Error ioutil.ReadAll: " + filePath)
-	}
-
-	return string(b)
-}
-
-func fileExists(filename string) bool {
-
-	info, err := os.Stat(filename)
-
-	if os.IsNotExist(err) {
-		return false
-	}
-	return !info.IsDir()
-}
-
-
-func removeSpecialChars(str string) string {
-	str = strings.ReplaceAll(str, "/", "-")
-	str = strings.ReplaceAll(str, ":", "-")
-	return str
-}
-
-func getURLContent(urlStr string) []byte {
-
-	// fmt.Printf("HTML code of %s ...\n", urlStr)
-
-	// Create HTTP client with timeout
-	client := &http.Client{
-		Timeout: 30 * time.Second,
-	}
-
-	// Create and modify HTTP request before sending
-	request, err := http.NewRequest("GET", urlStr, nil)
-
-	if err != nil {
-		panic(err)
-	}
-
-	request.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1")
-
-	// Make request
-	response, err := client.Do(request)
-
-	if err != nil {
-		panic(err)
-	}
-	defer response.Body.Close()
-
-	htmlBytes, err := ioutil.ReadAll(response.Body)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return htmlBytes
 }
 
 func removeTags(htmlBytes []byte) string {
@@ -202,4 +133,12 @@ func removeTags(htmlBytes []byte) string {
 
 	return htmlStr
 
+}
+
+func getSortedSiteMapURL(urls []sitemap.URL) []sitemap.URL {
+
+	sort.Slice(urls, func(i, j int) bool {
+		return urls[i].GetTime().Before(urls[j].GetTime())
+	})
+	return urls
 }

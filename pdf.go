@@ -15,7 +15,7 @@ type Range struct {
 
 func generateAllPdf() {
 
-	files := getHtmlFiles(forceFetchHtml, forceSiteMapFetch)
+	files := getHtmlFiles()
 
 	totalFiles := len(files)
 
