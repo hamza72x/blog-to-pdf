@@ -54,6 +54,5 @@ Usage of blog-to-pdf:
 ```
 $ blog-to-pdf -domain=alorpothe.wordpress.com -article-per-pdf=7
 $ blog-to-pdf -domain=amarspondon.wordpress.com
-$ blog-to-pdf -domain=bibijaan.com -sitemap-slug=sitemap-posts.xml -generate-pdf=false -article-parent-div=".inner" -force-html-fetch=true
 ```
 
