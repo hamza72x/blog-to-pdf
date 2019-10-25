@@ -82,7 +82,7 @@ func getUrls() []string {
 	var iCount = len(smap.URLS) - 1
 
 	for i, url := range getSortedSiteMapURL(smap.URLS) {
-		
+
 		if ignoreURL(url.Loc) {
 			continue
 		}

@@ -63,7 +63,7 @@ func createPDF(files []HtmlFile, theRange Range) {
 	docHtmlStr, err := doc.Selection.Html()
 	check(err)
 
-	filename := fmt.Sprintf(buildDir+"/[%d-%d] "+DOMAIN+".html", theRange.iMin, theRange.iMax)
+	filename := fmt.Sprintf(buildDir+"/%d-%d_"+DOMAIN+".html", theRange.iMin, theRange.iMax)
 
 	osFile, err := os.Create(filename)
 
