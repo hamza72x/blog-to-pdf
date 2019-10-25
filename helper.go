@@ -45,7 +45,6 @@ func getURLContent(urlStr string) []byte {
 	return htmlBytes
 }
 
-
 func getFileContents(filePath string) []byte {
 
 	file, err := os.Open(filePath)
@@ -129,4 +128,10 @@ func checkDomain(name string) error {
 		return fmt.Errorf("cookie domain: top level domain '%s' at offset %d begins with a digit", name[l:], l)
 	}
 	return nil
+}
+
+func p(str string) {
+	fmt.Println("--------------------------------------------")
+	fmt.Println(str)
+	fmt.Println("--------------------------------------------")
 }

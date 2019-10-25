@@ -1,6 +1,7 @@
 ## INSTALL
 
 ```
+brew cask install wkhtmltopdf
 go get gitlab.com/thejini3/blog-to-pdf
 cd $GOPATH/src/gitlab.com/thejini3/blog-to-pdf
 go install

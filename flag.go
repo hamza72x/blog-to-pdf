@@ -24,7 +24,9 @@ func bootFlag() {
 	flag.IntVar(&ArticlePerPDF, "article-per-pdf", 10,
 		"The number of articles per pdf",
 	)
-
+	flag.StringVar(&pdfPageSize, "pdf-size", "A7",
+		"The size of output PDF",
+	)
 	flag.Parse()
 
 	DOMAIN = strings.ReplaceAll(DOMAIN, "/", "")

@@ -14,9 +14,10 @@ var SiteBasedTags = map[string][]string{
 		"#wpcom-block-editor-styles-css",
 	},
 }
-var SpecialReplaceAll = map[string][]string{
+var SpecialReplaceAll = map[string][]map[string]string{
 	"alorpothe.wordpress.com": {
-		"<script src=\"//stats.wp.com/w.js?60\" type=\"text/javascript\" async=\"\" defer=\"\"></script>",
+		{"<script src=\"//stats.wp.com/w.js?60\" type=\"text/javascript\" async=\"\" defer=\"\"></script>": ""},
+		{",v=\"//\"": ",v=\"https://\""},
 	},
 }
 
@@ -45,8 +46,10 @@ func removeTags(htmlBytes []byte) string {
 	specialReplaces, ok2 := SpecialReplaceAll[DOMAIN]
 
 	if ok2 {
-		for _, toBeRemoved := range specialReplaces {
-			htmlStr = strings.ReplaceAll(htmlStr, toBeRemoved, "")
+		for _, replaceMaps := range specialReplaces {
+			for k, v := range replaceMaps {
+				htmlStr = strings.ReplaceAll(htmlStr, k, v)
+			}
 		}
 	}
 

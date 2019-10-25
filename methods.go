@@ -31,13 +31,9 @@ func getHtmlFiles() []HtmlFile {
 				panic(err)
 			}
 
-			osFile.WriteString(
-				removeTags(
-					getURLContent(urlStr),
-				),
-			)
+			osFile.Write(getURLContent(urlStr))
 
-			fmt.Printf("%v: Did Write: %v\n", i+1, path)
+			p(fmt.Sprintf("%v: Did Write: %v\n", i+1, path))
 
 			osFile.Close()
 		}

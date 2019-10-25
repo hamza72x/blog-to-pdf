@@ -6,6 +6,8 @@ import (
 	"math"
 	"github.com/PuerkitoBio/goquery"
 	"os"
+	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
+	"io/ioutil"
 )
 
 type Range struct {
@@ -63,19 +65,49 @@ func createPDF(files []HtmlFile, theRange Range) {
 	docHtmlStr, err := doc.Selection.Html()
 	check(err)
 
-	filename := fmt.Sprintf(buildDir+"/%d-%d_"+DOMAIN+".html", theRange.iMin, theRange.iMax)
+	htmlFilePath := fmt.Sprintf(buildDir+"/%d-%d_"+DOMAIN+".html", theRange.iMin, theRange.iMax)
 
-	osFile, err := os.Create(filename)
-
+	osFile, err := os.Create(htmlFilePath)
 	check(err)
 
-	fmt.Println("Generated: " + filename)
+	p("Generated Combined HTML File: " + htmlFilePath)
 
 	osFile.WriteString(docHtmlStr)
 
 	osFile.Close()
 
-	// exec
-	// 	wkhtmltopdf -L 2mm -R 2mm -T 5mm -B 5mm -s A7 0-7_alorpothe.wordpress.com.html test.pdf
+	htmlToPDF(htmlFilePath,
+		fmt.Sprintf(pdfDir+"/%d-%d_"+DOMAIN+".pdf", theRange.iMin, theRange.iMax),
+	)
+}
 
+func htmlToPDF(htmlFilePath string, pdfFilePath string) {
+
+	p("Creating PDF File!")
+
+	pdfg, err := wkhtmltopdf.NewPDFGenerator()
+	check(err)
+
+	htmlfile, err := ioutil.ReadFile(htmlFilePath)
+	check(err)
+
+	pdfg.PageSize.Set(pdfPageSize)
+	pdfg.MarginLeft.Set(2)
+	pdfg.MarginRight.Set(2)
+	pdfg.MarginTop.Set(2)
+	pdfg.MarginBottom.Set(2)
+
+	pdfg.AddPage(wkhtmltopdf.NewPageReader(bytes.NewReader(htmlfile)))
+
+	err = pdfg.Create()
+	// check(err)
+
+	err = pdfg.WriteFile(pdfFilePath)
+	check(err)
+
+	p(fmt.Sprintf("Generated PDF size %vkB: %v\n", len(pdfg.Bytes())/1024, pdfFilePath))
+
+	if pdfg.Buffer().Len() != len(pdfg.Bytes()) {
+		fmt.Println("Buffersize not equal: " + pdfFilePath)
+	}
 }
