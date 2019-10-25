@@ -23,9 +23,9 @@ func getHtmlFiles(forceFetchHTMLS bool, forceFetchSiteMap bool) []HtmlFile {
 
 	var htmlFiles []HtmlFile
 
-	for _, urlStr := range getUrls(false) {
+	for i, urlStr := range getUrls(false) {
 
-		path := "htmls/" + removeSpecialChars(urlStr) + ".html"
+		path := htmlDir + "/" + removeSpecialChars(urlStr) + ".html"
 
 		if forceFetchHTMLS || !fileExists(path) {
 
@@ -41,7 +41,7 @@ func getHtmlFiles(forceFetchHTMLS bool, forceFetchSiteMap bool) []HtmlFile {
 				),
 			)
 
-			fmt.Println("Did Write: " + path)
+			fmt.Printf("%v: Did Write: %v\n", i+1, path)
 
 			osFile.Close()
 		}
@@ -61,11 +61,11 @@ func getHtmlFiles(forceFetchHTMLS bool, forceFetchSiteMap bool) []HtmlFile {
 func getUrls(forceFetchSiteMap bool) []string {
 
 	var urls []string
-	localSiteMap := getLocalSiteMapUrlsFilePath()
+	// localSiteMap := getLocalSiteMapUrlsFilePath()
 
 	if !forceFetchSiteMap {
-		if fileExists(localSiteMap) {
-			return strings.Split(getFileContentAsString(strings.ReplaceAll(localSiteMap, " ", "")), "\n")
+		if fileExists(siteMapFilePath) {
+			return strings.Split(getFileContentAsString(strings.ReplaceAll(siteMapFilePath, " ", "")), "\n")
 		}
 	}
 
@@ -75,10 +75,10 @@ func getUrls(forceFetchSiteMap bool) []string {
 		fmt.Println("Site map get error: " + err.Error())
 	}
 
-	f, err := os.Create(localSiteMap)
+	f, err := os.Create(siteMapFilePath)
 
 	if err != nil {
-		fmt.Println("Error os.Create: "+err.Error(), localSiteMap)
+		fmt.Println("Error os.Create: "+err.Error(), siteMapFilePath)
 	}
 
 	var iCount = len(smap.URL) - 1
@@ -101,7 +101,7 @@ func getUrls(forceFetchSiteMap bool) []string {
 }
 
 func ignoreURL(urlStr string) bool {
-	return (urlStr == SITE) || (urlStr == SITE+"/")
+	return (urlStr == SiteURL) || (urlStr == SiteURL+"/")
 }
 
 func getFileContentAsString(filePath string) string {
@@ -132,9 +132,6 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
-func getLocalSiteMapUrlsFilePath() string {
-	return "urls/" + removeSpecialChars(SiteMapURL) + ".txt"
-}
 
 func removeSpecialChars(str string) string {
 	str = strings.ReplaceAll(str, "/", "-")
@@ -186,15 +183,12 @@ func removeTags(htmlBytes []byte) string {
 	}
 
 	tags, ok := SiteBasedTags[DOMAIN]
+
 	if ok {
 		for _, tag := range tags {
-			doc.Find(tag).Each(func(i int, s *goquery.Selection) {
-				s.Remove()
-			})
+			doc.Find(tag).Remove()
 		}
 	}
-
-
 
 	//doc.Find("head").Each(func(i int, s *goquery.Selection) {
 	//	s.Append("<style> body p { font-family: \"Kohinoor Bangla\", serif !important; font-size: 20px !important; } </style>")
