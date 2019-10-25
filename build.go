@@ -10,10 +10,6 @@ import (
 	"io/ioutil"
 )
 
-var ArticleWrappers = map[string]string{
-	"alorpothe.wordpress.com":  "#content",
-	"islamshajid.blogspot.com": "div.post",
-}
 
 type Range struct {
 	iMin int

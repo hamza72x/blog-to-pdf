@@ -6,24 +6,7 @@ import (
 	"strings"
 )
 
-var SiteBasedTags = map[string][]string{
-	"alorpothe.wordpress.com": {"div#secondary", "div.menu-search", "nav#nav-single",
-		"footer#colophon", "div.widget", "div#fb-root", "div#actionbar",
-		"form", "h3#reply-title", "div#jp-post-flair", "div#header-img", ".cs-rating .pd-rating",
-		"div.wpcnt", "h3#entry-format", ".rating-star-icon", "article.page", "link[rel=dns-prefetch]",
-		"#wpcom-block-editor-styles-css",
-	},
-	"islamshajid.blogspot.com": {
-		"aside", ".post-sidebar", ".subscribe-section-container", ".search",
-		"#PopularPosts1", "footer", ".comment-replybox-thread",
-	},
-}
-var SpecialReplaceAll = map[string][]map[string]string{
-	"alorpothe.wordpress.com": {
-		{"<script src=\"//stats.wp.com/w.js?60\" type=\"text/javascript\" async=\"\" defer=\"\"></script>": ""},
-		{",v=\"//\"": ",v=\"https://\""},
-	},
-}
+
 
 func removeTags(htmlBytes []byte) string {
 
