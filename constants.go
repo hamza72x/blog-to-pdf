@@ -36,7 +36,7 @@ is_test_run = false
 
 
 # Generate pdf or not, if false then only combined-html files will be created!
-generate_pdf = false
+generate_pdf = true
 
 # A0        =>	841 x 1189 mm
 # A1        =>	594 x 841 mm
