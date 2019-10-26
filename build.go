@@ -94,7 +94,7 @@ func createHTML(files []HtmlFile, theRange Range, fileNo int) {
 	}
 
 	doc.Find(cfg.ArticleTitleClass).Each(func(i int, s *goquery.Selection) {
-		s.PrependHtml("[" + strconv.Itoa(theRange.iMin+i+1) + "]")
+		s.PrependHtml("[" + strconv.Itoa(theRange.iMin+i+1) + "] ")
 	})
 
 	docHtmlStr, err := doc.Selection.Html()
