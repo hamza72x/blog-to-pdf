@@ -51,7 +51,7 @@ func getHtmlFiles() []HtmlFile {
 		})
 
 	}
-
+	p("Run again if app quits here!")
 	return htmlFiles
 }
 
