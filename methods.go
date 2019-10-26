@@ -6,10 +6,11 @@ import (
 	"strings"
 	"sort"
 	"gitlab.com/thejini3/blog-to-pdf/sitemap"
+	"strconv"
 )
 
 type HtmlFile struct {
-	Name      string
+	// Name      string
 	LocalPath string
 	Content   string
 	URL       string
@@ -26,27 +27,28 @@ func getHtmlFiles() []HtmlFile {
 			break
 		}
 
-		path := originalHtmlDir + "/" + getHtmlLocalFileNameFromUrl(urlStr) + ".html"
+		localHtmlFilePath := originalHtmlDir + "/" + strconv.Itoa(i+1) + ".html"
 
-		if cfg.ForceFetchHtml || !fileExists(path) {
+		if cfg.ForceFetchHtml || !fileExists(localHtmlFilePath) {
 
-			osFile, err := os.Create(path)
+			osFile, err := os.Create(localHtmlFilePath)
 
 			if err != nil {
 				panic(err)
 			}
 
-			osFile.Write(getURLContent(urlStr))
+			urlContent := getURLContent(urlStr)
+			osFile.WriteString(string(urlContent))
 
-			p(fmt.Sprintf("%v: Downloaded Origin Html: %v\n", i+1, path))
+			p(fmt.Sprintf("%v: Downloaded Origin Html: %v\n", i+1, localHtmlFilePath))
 
 			osFile.Close()
 		}
 
 		htmlFiles = append(htmlFiles, HtmlFile{
-			Name:      getHtmlLocalFileNameFromUrl(urlStr),
-			LocalPath: path,
-			Content:   removeTags(getFileContents(path)),
+			// Name:      getHtmlLocalFileNameFromUrl(urlStr),
+			LocalPath: localHtmlFilePath,
+			Content:   removeTags(getFileContents(localHtmlFilePath)),
 			URL:       urlStr,
 		})
 

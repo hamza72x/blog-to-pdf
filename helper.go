@@ -7,10 +7,7 @@ import (
 	"strings"
 	"os"
 	"net/http"
-	"time"
 	"encoding/json"
-	"regexp"
-	"log"
 )
 
 func getURLContent(urlStr string) []byte {
@@ -18,15 +15,13 @@ func getURLContent(urlStr string) []byte {
 	// fmt.Printf("HTML code of %s ...\n", urlStr)
 
 	// Create HTTP client with timeout
-	client := &http.Client{
-		Timeout: 30 * time.Second,
-	}
+	client := &http.Client{}
 
 	// Create and modify HTTP request before sending
 	request, err := http.NewRequest("GET", urlStr, nil)
 
 	if err != nil {
-		panic(err)
+		pp("Error request, err := http.NewRequest: " + err.Error())
 	}
 
 	request.Header.Set("User-Agent", ConstUserAgent)
@@ -35,15 +30,18 @@ func getURLContent(urlStr string) []byte {
 	response, err := client.Do(request)
 
 	if err != nil {
-		panic(err)
+		p("Error response, err := client.Do: " + err.Error())
+		pp("Please run the program again!")
 	}
-	defer response.Body.Close()
 
 	htmlBytes, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
-		panic(err)
+		pp("Error htmlBytes, err := ioutil.ReadAll: " + err.Error())
 	}
+
+	response.Body.Close()
+	client.CloseIdleConnections()
 
 	return htmlBytes
 }
@@ -74,13 +72,13 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
-func getHtmlLocalFileNameFromUrl(urlStr string) string {
-	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
-	if err != nil {
-		log.Fatal(err)
-	}
-	return reg.ReplaceAllString(urlStr, "-")
-}
+//func getHtmlLocalFileNameFromUrl(urlStr string) string {
+//	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	return reg.ReplaceAllString(urlStr, "")
+//}
 
 func checkDomain(name string) error {
 
