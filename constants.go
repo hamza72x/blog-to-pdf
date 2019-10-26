@@ -2,40 +2,6 @@ package main
 
 const ConstUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1"
 
-//
-//var DefaultElementsToBeRemoved = []string{
-//	"link[rel=dns-prefetch]",
-//	"footer",
-//	".respond", ".wpcnt", ".sharing", ".post-sidebar",
-//	"#jp-post-flair",
-//	"#wpcom-block-editor-styles-css",
-//}
-//var DefaultStringsToBeReplaced = map[string]string{
-//	"<script src=\"//stats.wp.com/w.js?60\" type=\"text/javascript\" async=\"\" defer=\"\"></script>": "",
-//	",v=\"//\"":                                                                                       ",v=\"https://\"",
-//}
-//
-//var DivsToBeRemoved = map[string][]string{
-//	"alorpothe.wordpress.com": {
-//		"div#secondary", "div.menu-search", "nav#nav-single",
-//		"footer#colophon", "div#fb-root", "div#actionbar",
-//		"h3#reply-title", "div#header-img", ".cs-rating .pd-rating",
-//		"h3#entry-format", ".rating-star-icon", "article.page",
-//	},
-//	"islamshajid.blogspot.com": {
-//		".subscribe-section-container",
-//		"#PopularPosts1", ".comment-replybox-thread", ".back-button-container",
-//		".footer", "aside", ".sidebar", ".search", "form",
-//	},
-//	"amarspondon.wordpress.com": {
-//		".menu-wrapper", ".post-nav-wrapper",
-//	},
-//}
-//var SpecialStringsReplaceAll = map[string][]map[string]string{
-//"islamshajid.blogspot.com": {
-//{},
-//},
-//}
 
 const ConstSampleINI = `protocol = https://
 
@@ -49,7 +15,10 @@ article_per_pdf = 10
 # so, which portion of the HTML will be merged in the main Layout? Ex: 'div#content', 'div.post', 'article'
 article_parent_element = body
 
-elements_to_remove = footer, #jp-post-flair, #wpcom-block-editor-styles-css, .wpcnt, .respond, link[rel=dns-prefetch]
+article_title_class = h3.post-title
+
+# for "id", use "$" instead of "#"
+elements_to_remove = .comment-form, .post-footer, .post-sidebar, .share-buttons-container, footer, $jp-post-flair, $wpcom-block-editor-styles-css, .wpcnt, .respond, link[rel=dns-prefetch], .back-button-container, .subscribe-section-container, $PopularPosts1, .comment-replybox-thread, .back-button-container, .footer, aside, .sidebar, .search, form,
 
 # There will be in need of some REPLACES, that's why had to use JSON file,
 # Make sure that's valid JSON file
@@ -67,7 +36,7 @@ is_test_run = false
 
 
 # Generate pdf or not, if false then only combined-html files will be created!
-generate_pdf = true
+generate_pdf = false
 
 # A0        =>	841 x 1189 mm
 # A1        =>	594 x 841 mm
@@ -105,17 +74,17 @@ pdf_size = A7
 
 
 # "Landscape" or "Portrait"
-orientation = Portrait
+pdf_orientation = Portrait
 
 
 # UI
-font_size = 16
-font_family = "Kohinoor Bangla", "Kalpurush", "Open Sans", serif
+# font_size = 1.5em
+# font_family = "Kohinoor Bangla", "Kalpurush", "Open Sans", serif
 
 # Margin / White spaces for pdf (mm)
 pdf_margin_top = 3
-pdf_margin_left = 3
-pdf_margin_right = 3
+pdf_margin_left = 1
+pdf_margin_right = 1
 pdf_margin_bottom = 3
 `
 

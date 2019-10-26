@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/PuerkitoBio/goquery"
 	"bytes"
+	"strings"
 )
 
 func removeTags(htmlBytes []byte) string {
@@ -13,12 +14,8 @@ func removeTags(htmlBytes []byte) string {
 		panic(err)
 	}
 
-	//for _, element := range DefaultElementsToBeRemoved {
-	//	doc.Find(element).Remove()
-	//}
-
-	for _, tag := range elementsToRemove {
-		doc.Find(tag).Remove()
+	for _, tag := range cfg.ElementsToRemove {
+		doc.Find(strings.ReplaceAll(tag, "$", "#")).Remove()
 	}
 
 	htmlStr, err := doc.Html()
@@ -27,19 +24,9 @@ func removeTags(htmlBytes []byte) string {
 		panic(err)
 	}
 
-	//for k, v := range DefaultStringsToBeReplaced {
-	//	htmlStr = strings.ReplaceAll(htmlStr, k, v)
-	//}
-
-	//specialReplaces, ok2 := SpecialStringsReplaceAll[siteDomain]
-	//
-	//if ok2 {
-	//	for _, replaceMaps := range specialReplaces {
-	//		for k, v := range replaceMaps {
-	//			htmlStr = strings.ReplaceAll(htmlStr, k, v)
-	//		}
-	//	}
-	//}
+	for _, strReplace := range strReplaces {
+		htmlStr = strings.ReplaceAll(htmlStr, strReplace.ReplaceKey, strReplace.ReplaceVal)
+	}
 
 	return htmlStr
 

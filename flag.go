@@ -13,12 +13,7 @@ func bootFlag() RunMode {
 
 	flag.Parse()
 
-	if len(flag.Args()) == 0 {
-
-		ps("\n+\tWrong instruction given!")
-		pe(ConstHelpStr)
-		os.Exit(0)
-	} else if flag.Arg(0) == "init" {
+	if flag.Arg(0) == "init" {
 
 		generateIniFile()
 

@@ -13,10 +13,10 @@ pdfDir 			= ./any_blog.com/pdf
 func bootPaths() {
 
 
-	urlsTxtFilePath =  "./" + siteDomain + "/" + "urls.txt"
-	originalHtmlDir =  "./" + siteDomain + "/original-html"
-	combinedHtmlDir =  "./" + siteDomain + "/combined-html"
-	pdfDir 			=  "./" + siteDomain + "/pdf"
+	urlsTxtFilePath =  "./" + cfg.Domain + "/" + "urls.txt"
+	originalHtmlDir =  "./" + cfg.Domain + "/original-html"
+	combinedHtmlDir =  "./" + cfg.Domain + "/combined-html"
+	pdfDir 			=  "./" + cfg.Domain + "/pdf"
 
 	createDirs(
 		[]string{originalHtmlDir, combinedHtmlDir, pdfDir},

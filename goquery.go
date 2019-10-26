@@ -14,7 +14,7 @@ func getContent(htmlFile HtmlFile) string {
 		panic(err)
 	}
 
-	content, err = doc.Find(articleParentElement).Html()
+	content, err = doc.Find(cfg.ArticleParentElement).Html()
 
 	if err != nil {
 		panic(err)

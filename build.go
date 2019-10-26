@@ -8,6 +8,7 @@ import (
 	"os"
 	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 	"io/ioutil"
+	"strconv"
 )
 
 type Range struct {
@@ -17,20 +18,19 @@ type Range struct {
 
 func buildAllHTMLS() {
 
-	var articlePerPDF = iniGetInt("article_per_pdf")
 	files := getHtmlFiles()
 
 	totalFiles := len(files)
 
 	var articleRanges []Range
 
-	totalPdfCount := int(math.Floor(float64(totalFiles) / float64(articlePerPDF)))
+	totalPdfCount := int(math.Floor(float64(totalFiles) / float64(cfg.ArticlePerPDF)))
 	lastIMax := 0
 
 	for i := 0; i < totalPdfCount; i++ {
 
-		iMax := (i + 1) * articlePerPDF
-		iMin := i * articlePerPDF
+		iMax := (i + 1) * cfg.ArticlePerPDF
+		iMin := i * cfg.ArticlePerPDF
 
 		if iMax == totalFiles {
 			iMax = iMax - 1
@@ -67,20 +67,43 @@ func createHTML(files []HtmlFile, theRange Range, fileNo int) {
 	firstHtmlFile := files[0]
 
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader([]byte(firstHtmlFile.Content)))
+
+	var style string
+
+	if len(cfg.FontFamily) > 1 {
+		style = fmt.Sprintf(
+			"<style> body p { font-family: %s !important; } </style>", arrToStr(cfg.FontFamily, ","),
+		)
+	}
+	if len(cfg.FontSize) > 1 {
+		style += fmt.Sprintf(
+			"<style> body p { font-size: %s !important; } </style>", cfg.FontSize,
+		)
+	}
+
+	doc.Find("head").AppendHtml(style)
+
 	if err != nil {
 		pp("Error goquery.NewDocumentFromReader:" + err.Error())
 	}
 
 	for i := 1; i < fCount; i++ {
-		doc.Find(articleParentElement).AppendHtml(getContent(files[i]))
+		articleParent := doc.Find(cfg.ArticleParentElement)
+		articleParent.AppendHtml(`<br/><hr/><hr/><br/>`)
+		articleParent.AppendHtml(getContent(files[i]))
 	}
 
+	doc.Find(cfg.ArticleTitleClass).Each(func(i int, s *goquery.Selection) {
+		s.PrependHtml("[" + strconv.Itoa(theRange.iMin+i+1) + "]")
+	})
+
 	docHtmlStr, err := doc.Selection.Html()
+
 	if err != nil {
 		pp("Error doc.Selection.Html:" + err.Error())
 	}
 
-	htmlFilePath := fmt.Sprintf(combinedHtmlDir+"/%d-%d_"+siteDomain+".html", theRange.iMin+1, theRange.iMax+1)
+	htmlFilePath := fmt.Sprintf(combinedHtmlDir+"/%d-%d_"+cfg.Domain+".html", theRange.iMin+1, theRange.iMax+1)
 
 	osFile, err := os.Create(htmlFilePath)
 	if err != nil {
@@ -93,9 +116,9 @@ func createHTML(files []HtmlFile, theRange Range, fileNo int) {
 
 	osFile.Close()
 
-	if generatePDF {
+	if cfg.GeneratePDF {
 		htmlToPDF(htmlFilePath,
-			fmt.Sprintf(pdfDir+"/%d-%d_"+siteDomain+".pdf", theRange.iMin+1, theRange.iMax+1), fileNo,
+			fmt.Sprintf(pdfDir+"/%d-%d_"+cfg.Domain+".pdf", theRange.iMin+1, theRange.iMax+1), fileNo,
 		)
 	}
 }
@@ -114,11 +137,12 @@ func htmlToPDF(htmlFilePath string, pdfFilePath string, i int) {
 		pp("Error ioutil.ReadFile(htmlFilePath): " + err.Error())
 	}
 
-	pdfg.PageSize.Set(pdfPageSize)
-	pdfg.MarginLeft.Set(uint(pdfMarginTop))
-	pdfg.MarginRight.Set(uint(pdfMarginLeft))
-	pdfg.MarginTop.Set(uint(pdfMarginRight))
-	pdfg.MarginBottom.Set(uint(pdfMarginBottom))
+	pdfg.PageSize.Set(cfg.PdfPageSize)
+	pdfg.MarginLeft.Set(uint(cfg.PdfMarginTop))
+	pdfg.MarginRight.Set(uint(cfg.PdfMarginLeft))
+	pdfg.MarginTop.Set(uint(cfg.PdfMarginRight))
+	pdfg.MarginBottom.Set(uint(cfg.PdfMarginBottom))
+	pdfg.Orientation.Set(cfg.PdfOrientation)
 
 	pdfg.AddPage(wkhtmltopdf.NewPageReader(bytes.NewReader(htmlfile)))
 

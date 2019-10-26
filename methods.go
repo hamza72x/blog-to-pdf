@@ -22,13 +22,13 @@ func getHtmlFiles() []HtmlFile {
 
 	for i, urlStr := range urls {
 
-		if isTestRun && i == 11 {
+		if cfg.IsTestRun && i == 11 {
 			break
 		}
 
 		path := originalHtmlDir + "/" + removeSpecialChars(urlStr) + ".html"
 
-		if forceFetchHtml || !fileExists(path) {
+		if cfg.ForceFetchHtml || !fileExists(path) {
 
 			osFile, err := os.Create(path)
 
@@ -38,7 +38,7 @@ func getHtmlFiles() []HtmlFile {
 
 			osFile.Write(getURLContent(urlStr))
 
-			p(fmt.Sprintf("%v: Did Write: %v\n", i+1, path))
+			p(fmt.Sprintf("%v: Downloaded Origin Html: %v\n", i+1, path))
 
 			osFile.Close()
 		}
@@ -57,10 +57,7 @@ func getHtmlFiles() []HtmlFile {
 
 func getUrls() []string {
 
-	var urls []string
-	// localSiteMap := getLocalSiteMapUrlsFilePath()
-
-	if !forceUrlsFetch && fileExists(urlsTxtFilePath) {
+	if !cfg.ForceUrlsFetch && fileExists(urlsTxtFilePath) {
 		return strings.Split(
 			strings.ReplaceAll(string(getFileContents(urlsTxtFilePath)), " ", ""),
 			"\n",
@@ -77,18 +74,21 @@ func getUrls() []string {
 	var urlStr = getUrlsFromSiteMap()
 
 	if len(urlStr) == 0 {
-		pp("SiteMap url isn't valid probably!")
+		ps("SiteMap url isn't valid probably!")
+		pm("So, try following wget command go grab all url of the site")
+		pm(`$ wget --spider -r ` + SiteURL + ` 2>&1 | grep '^--' | awk '{ print $3 }' | grep -v '\.\(css\|js\|png\|gif\|jpg\|JPG\)$' > /tmp/urls.txt`)
+		pe("Then copy full content of 'wget.urls.txt' file to urls.txt")
 	}
 
 	f.WriteString(urlStr)
 
-	return urls
+	return strToArr(urlStr, "\n")
 }
 
 func getUrlsFromSiteMap() string {
 	var allUrls = ""
 
-	smap, err := sitemap.Get(SiteMapURL, nil)
+	smap, err := sitemap.Get(cfg.SiteMapURL, nil)
 
 	if err != nil {
 		fmt.Println("Site map get error: " + err.Error())
@@ -102,7 +102,7 @@ func getUrlsFromSiteMap() string {
 			continue
 		}
 
-		if isTestRun && i == 11 {
+		if cfg.IsTestRun && i == 11 {
 			break
 		}
 

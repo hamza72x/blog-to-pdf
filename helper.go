@@ -10,7 +10,6 @@ import (
 	"time"
 )
 
-
 func getURLContent(urlStr string) []byte {
 
 	// fmt.Printf("HTML code of %s ...\n", urlStr)
@@ -147,7 +146,10 @@ func p(str string) {
 	fmt.Println("+ " + str)
 	fmt.Println("-------------------------------------------------------")
 }
-
+func pf(a ...interface{}) (n int, err error) {
+	fmt.Println("-------------------------------------------------------")
+	return fmt.Fprintln(os.Stdout, a...)
+}
 func pp(str string) {
 	ps(str)
 	pe("I Quit :'(")
@@ -166,4 +168,41 @@ func tempWrite(path string, str string) {
 	f, _ := os.Create(path)
 	f.WriteString(str)
 	f.Close()
+}
+func strToArr(str string, sep string) []string {
+	return strings.Split(
+		strings.ReplaceAll(str, " ", ""),
+		sep,
+	)
+}
+func arrToStr(strs []string, sep string) string {
+	var str = ""
+	t := len(strs) - 1
+	for i, v := range strs {
+		str += v
+		if t != i {
+			str += sep
+		}
+	}
+	return str
+}
+// file data to []byte
+func FileDataToByte(filePath string) (byteValue []byte) {
+	// Open our jsonFile
+	jsonFile, err := os.Open(filePath)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		pp("Error opening file: " + err.Error())
+	}
+	// log.NoticeF("Successfully opened: %s", filePath)
+	// defer the closing of our file so that we can parse it later on
+	defer jsonFile.Close()
+	// get bytes
+	byteValue, err = ioutil.ReadAll(jsonFile)
+
+	if err != nil {
+		pp("Error ioutil.ReadAll: " + err.Error())
+	}
+
+	return
 }

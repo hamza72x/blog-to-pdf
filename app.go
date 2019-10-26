@@ -2,6 +2,8 @@ package main
 
 import (
 	"gopkg.in/ini.v1"
+	"strings"
+	"encoding/json"
 )
 
 /*
@@ -18,10 +20,13 @@ var pdfDir string
 
 var urlsTxtFilePath string
 
-var cfg *ini.File
+var cfgFile *ini.File
 var errIni error
 
 var flagIniPath string
+var cfg IniData
+var strReplaces []StringReplace
+var SiteURL string
 
 func main() {
 
@@ -40,20 +45,37 @@ func main() {
 
 	case RunModeGo:
 		boot()
-		// buildAllHTMLS()
-		p("IF app stops here, then just 'go' again!")
+		p("IF app stops here, then just run again!")
+		buildAllHTMLS()
 	}
 
 }
 
 func boot() {
 
-	cfg, errIni = ini.Load(flagIniPath)
+	cfgFile, errIni = ini.Load(flagIniPath)
 
 	if errIni != nil {
 		pp("Error loading ini file: " + errIni.Error())
 	}
 
-	bootIni()
+	err := cfgFile.Section("").MapTo(&cfg)
+
+	if err != nil {
+		pp("Error .MapTo(iniData): " + err.Error())
+	}
+
+	SiteURL = cfg.Protocol + cfg.Domain
+
+	if !strings.Contains(cfg.SiteMapURL, "https://") || !strings.Contains(cfg.SiteMapURL, "http://") {
+		cfg.SiteMapURL = cfg.Protocol + cfg.SiteMapURL
+	}
+
+	err = json.Unmarshal(FileDataToByte(cfg.StringReplacesFile), &strReplaces)
+
+	if err != nil {
+		pp("Error parsing (" + cfg.StringReplacesFile + ") : " + err.Error())
+	}
+
 	bootPaths()
 }
