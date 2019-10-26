@@ -173,7 +173,7 @@ func tempWrite(path string, str string) {
 }
 func strToArr(str string, sep string) []string {
 	return strings.Split(
-		strings.ReplaceAll(str, " ", ""),
+		strings.TrimSpace(str),
 		sep,
 	)
 }
