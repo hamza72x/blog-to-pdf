@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 go install
 cd storage
-blog-to-pdf --ini=configs.islamshajid.blogspot.com.ini
+blog-to-pdf --ini=dev.ini
 cd ..

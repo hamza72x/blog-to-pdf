@@ -71,6 +71,8 @@ func boot() {
 		cfg.SiteMapURL = cfg.Protocol + cfg.SiteMapURL
 	}
 
+	PrettyPrint(&cfg)
+
 	if !fileExists(cfg.StringReplacesFile) {
 
 		p("No string replace file! Try running $ blog-to-pdf init")

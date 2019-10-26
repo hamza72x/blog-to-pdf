@@ -8,6 +8,9 @@ import (
 	"os"
 	"net/http"
 	"time"
+	"encoding/json"
+	"regexp"
+	"log"
 )
 
 func getURLContent(urlStr string) []byte {
@@ -52,14 +55,13 @@ func getFileContents(filePath string) []byte {
 	if err != nil {
 		fmt.Println("Error reading file: " + filePath)
 	}
-	defer file.Close()
 
 	b, err := ioutil.ReadAll(file)
 
 	if err != nil {
 		fmt.Println("Error ioutil.ReadAll: " + filePath)
 	}
-
+	file.Close()
 	return b
 }
 func fileExists(filename string) bool {
@@ -72,10 +74,12 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
-func removeSpecialChars(str string) string {
-	str = strings.ReplaceAll(str, "/", "-")
-	str = strings.ReplaceAll(str, ":", "-")
-	return str
+func getHtmlLocalFileNameFromUrl(urlStr string) string {
+	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return reg.ReplaceAllString(urlStr, "-")
 }
 
 func checkDomain(name string) error {
@@ -186,6 +190,7 @@ func arrToStr(strs []string, sep string) string {
 	}
 	return str
 }
+
 // file data to []byte
 func FileDataToByte(filePath string) (byteValue []byte) {
 	// Open our jsonFile
@@ -205,4 +210,15 @@ func FileDataToByte(filePath string) (byteValue []byte) {
 	}
 
 	return
+}
+
+func PrettyPrint(data interface{}) {
+	var p []byte
+	//    var err := error
+	p, err := json.MarshalIndent(data, "", "\t")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%s \n", p)
 }

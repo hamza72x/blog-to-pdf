@@ -26,7 +26,7 @@ func getHtmlFiles() []HtmlFile {
 			break
 		}
 
-		path := originalHtmlDir + "/" + removeSpecialChars(urlStr) + ".html"
+		path := originalHtmlDir + "/" + getHtmlLocalFileNameFromUrl(urlStr) + ".html"
 
 		if cfg.ForceFetchHtml || !fileExists(path) {
 
@@ -44,7 +44,7 @@ func getHtmlFiles() []HtmlFile {
 		}
 
 		htmlFiles = append(htmlFiles, HtmlFile{
-			Name:      removeSpecialChars(urlStr),
+			Name:      getHtmlLocalFileNameFromUrl(urlStr),
 			LocalPath: path,
 			Content:   removeTags(getFileContents(path)),
 			URL:       urlStr,
@@ -57,18 +57,11 @@ func getHtmlFiles() []HtmlFile {
 
 func getUrls() []string {
 
-	if !cfg.ForceUrlsFetch && fileExists(urlsTxtFilePath) {
+	if !cfg.ForceUrlsFetch && fileExists(urlsTxtFilePath) == true {
 		return strings.Split(
 			strings.ReplaceAll(string(getFileContents(urlsTxtFilePath)), " ", ""),
 			"\n",
 		)
-	}
-
-	f, err := os.Create(urlsTxtFilePath)
-	defer f.Close()
-
-	if err != nil {
-		fmt.Println("Error os.Create: "+err.Error(), urlsTxtFilePath)
 	}
 
 	var urlStr = getUrlsFromSiteMap()
@@ -79,6 +72,14 @@ func getUrls() []string {
 		pm(`$ wget --spider -r ` + SiteURL + ` 2>&1 | grep '^--' | awk '{ print $3 }' | grep -v '\.\(css\|js\|png\|gif\|jpg\|JPG\)$' > /tmp/urls.txt`)
 		pe("Then copy full content of 'wget.urls.txt' file to urls.txt")
 	}
+
+	f, err := os.Create(urlsTxtFilePath)
+
+	if err != nil {
+		fmt.Println("Error os.Create: "+err.Error(), urlsTxtFilePath)
+	}
+
+	defer f.Close()
 
 	f.WriteString(urlStr)
 
@@ -117,7 +118,7 @@ func getUrlsFromSiteMap() string {
 }
 
 func ignoreURL(urlStr string) bool {
-	return (urlStr == SiteURL) || (urlStr == SiteURL+"/")
+	return (urlStr == SiteURL) || (urlStr == SiteURL+"/") || (urlStr == SiteURL+"/about") || (urlStr == SiteURL+"/contact")
 }
 
 func getSortedSiteMapURL(urls []sitemap.URL) []sitemap.URL {
