@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 	"sort"
 	"gitlab.com/thejini3/blog-to-pdf/sitemap"
 	"strconv"
@@ -60,10 +59,7 @@ func getHtmlFiles() []HtmlFile {
 func getUrls() []string {
 
 	if !cfg.ForceUrlsFetch && fileExists(urlsTxtFilePath) == true {
-		return strings.Split(
-			strings.ReplaceAll(string(getFileContents(urlsTxtFilePath)), " ", ""),
-			"\n",
-		)
+		return strToArr(string(getFileContents(urlsTxtFilePath)), "\n")
 	}
 
 	var urlStr = getUrlsFromSiteMap()
