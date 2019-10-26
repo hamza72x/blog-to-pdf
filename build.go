@@ -20,6 +20,8 @@ func buildAllHTMLS() {
 
 	files := getHtmlFiles()
 
+	p("Run again if app quits here!")
+
 	totalFiles := len(files)
 
 	var articleRanges []Range
