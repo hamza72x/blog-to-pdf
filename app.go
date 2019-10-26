@@ -71,11 +71,19 @@ func boot() {
 		cfg.SiteMapURL = cfg.Protocol + cfg.SiteMapURL
 	}
 
-	err = json.Unmarshal(FileDataToByte(cfg.StringReplacesFile), &strReplaces)
+	if !fileExists(cfg.StringReplacesFile) {
 
-	if err != nil {
-		pp("Error parsing (" + cfg.StringReplacesFile + ") : " + err.Error())
+		p("No string replace file! Try running $ blog-to-pdf init")
+
+	} else {
+
+		err = json.Unmarshal(FileDataToByte(cfg.StringReplacesFile), &strReplaces)
+
+		if err != nil {
+			ps("Error parsing (" + cfg.StringReplacesFile + ") : " + err.Error())
+		}
 	}
+
 
 	bootPaths()
 }
