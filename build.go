@@ -70,20 +70,9 @@ func createHTML(files []HtmlFile, theRange Range, fileNo int) {
 
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader([]byte(firstHtmlFile.Content)))
 
-	var style string
-
-	if len(cfg.FontFamily) > 1 {
-		style = fmt.Sprintf(
-			"<style> body p { font-family: %s !important; } </style>", arrToStr(cfg.FontFamily, ","),
-		)
+	if fileExists(cfg.CustomCssFile) {
+		doc.Find("head").AppendHtml(`<style>` + string(FileDataToByte(cfg.CustomCssFile)) + `</style>`)
 	}
-	if len(cfg.FontSize) > 1 {
-		style += fmt.Sprintf(
-			"<style> body p { font-size: %s !important; } </style>", cfg.FontSize,
-		)
-	}
-
-	doc.Find("head").AppendHtml(style)
 
 	if err != nil {
 		pp("Error goquery.NewDocumentFromReader:" + err.Error())

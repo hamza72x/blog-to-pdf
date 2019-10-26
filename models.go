@@ -15,8 +15,7 @@ type IniData struct {
 	GeneratePDF          bool     `ini:"generate_pdf"`
 	PdfPageSize          string   `ini:"pdf_size"`
 	PdfOrientation       string   `ini:"pdf_orientation"`
-	FontSize             string   `ini:"font_size"`
-	FontFamily           []string `ini:"font_family"`
+	CustomCssFile        string   `ini:"custom_css_file"`
 	PdfMarginTop         int      `ini:"pdf_margin_top"`
 	PdfMarginLeft        int      `ini:"pdf_margin_left"`
 	PdfMarginRight       int      `ini:"pdf_margin_right"`
