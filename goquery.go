@@ -14,21 +14,11 @@ func getContent(htmlFile HtmlFile) string {
 		panic(err)
 	}
 
-	content, err = doc.Find(getArticleWrapper()).Html()
+	content, err = doc.Find(articleParentElement).Html()
 
 	if err != nil {
 		panic(err)
 	}
 
 	return content
-}
-
-func getArticleWrapper() string {
-	if articleParentDiv == "body" {
-		div, ok := ArticleWrappers[DOMAIN]
-		if ok {
-			return div
-		}
-	}
-	return articleParentDiv
 }

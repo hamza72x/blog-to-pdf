@@ -26,7 +26,7 @@ func getHtmlFiles() []HtmlFile {
 			break
 		}
 
-		path := htmlDir + "/" + removeSpecialChars(urlStr) + ".html"
+		path := originalHtmlDir + "/" + removeSpecialChars(urlStr) + ".html"
 
 		if forceFetchHtml || !fileExists(path) {
 
@@ -60,28 +60,27 @@ func getUrls() []string {
 	var urls []string
 	// localSiteMap := getLocalSiteMapUrlsFilePath()
 
-	if !forceUrlsFetch && fileExists(urlsTxtPath) {
+	if !forceUrlsFetch && fileExists(urlsTxtFilePath) {
 		return strings.Split(
-			strings.ReplaceAll(string(getFileContents(urlsTxtPath)), " ", ""),
+			strings.ReplaceAll(string(getFileContents(urlsTxtFilePath)), " ", ""),
 			"\n",
 		)
 	}
 
-	f, err := os.Create(urlsTxtPath)
+	f, err := os.Create(urlsTxtFilePath)
 	defer f.Close()
 
 	if err != nil {
-		fmt.Println("Error os.Create: "+err.Error(), urlsTxtPath)
+		fmt.Println("Error os.Create: "+err.Error(), urlsTxtFilePath)
 	}
 
-	if !ContainsStr(siteMapNotApplicables, DOMAIN) {
-		f.WriteString(getUrlsFromSiteMap())
-	} else {
-		// have to get from feed I guess
-		urlContent := getURLContent(SiteURL + "/feed")
-		p(string(urlContent))
-		panic("NO SITE MAP DUDE!")
+	var urlStr = getUrlsFromSiteMap()
+
+	if len(urlStr) == 0 {
+		pp("SiteMap url isn't valid probably!")
 	}
+
+	f.WriteString(urlStr)
 
 	return urls
 }
@@ -93,10 +92,6 @@ func getUrlsFromSiteMap() string {
 
 	if err != nil {
 		fmt.Println("Site map get error: " + err.Error())
-	}
-
-	if err != nil {
-		fmt.Println("Error os.Create: "+err.Error(), urlsTxtPath)
 	}
 
 	var iCount = len(smap.URLS) - 1

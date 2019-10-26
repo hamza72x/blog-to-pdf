@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+
 func getURLContent(urlStr string) []byte {
 
 	// fmt.Printf("HTML code of %s ...\n", urlStr)
@@ -26,7 +27,7 @@ func getURLContent(urlStr string) []byte {
 		panic(err)
 	}
 
-	request.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1")
+	request.Header.Set("User-Agent", ConstUserAgent)
 
 	// Make request
 	response, err := client.Do(request)
@@ -130,12 +131,28 @@ func checkDomain(name string) error {
 	return nil
 }
 
+func ps(str string) {
+	fmt.Println("-------------------------------------------------------")
+	fmt.Println("+ " + str)
+}
+func pm(str string) {
+	fmt.Println("+ " + str)
+}
+func pe(str string) {
+	fmt.Println("+ " + str)
+	fmt.Println("-------------------------------------------------------")
+}
 func p(str string) {
-	fmt.Println("=======================================================")
-	fmt.Println(str)
-	fmt.Println("=======================================================")
+	fmt.Println("-------------------------------------------------------")
+	fmt.Println("+ " + str)
+	fmt.Println("-------------------------------------------------------")
 }
 
+func pp(str string) {
+	ps(str)
+	pe("I Quit :'(")
+	os.Exit(0)
+}
 func ContainsStr(array []string, value string) bool {
 	for _, a := range array {
 		if a == value {
