@@ -128,7 +128,6 @@ const ConstCusotmCss = `
 const ConstPageBreakClass = "wk-html-to-pdf-page-break"
 
 const ConstPageBreakCss = `
-@media print {
   .` + ConstPageBreakClass + ` {
     page-break-before: always;
   }
@@ -137,5 +136,4 @@ const ConstPageBreakCss = `
     page-break-after: avoid;
     page-break-before: avoid;
   }
-}
 `
