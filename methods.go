@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
-	"gitlab.com/thejini3/blog-to-pdf/sitemap"
+	"github.com/thejini3/blog-to-pdf/sitemap"
 	"strconv"
 )
 

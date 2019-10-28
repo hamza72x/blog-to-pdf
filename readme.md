@@ -2,8 +2,8 @@
 
 ```
 brew cask install wkhtmltopdf
-go get gitlab.com/thejini3/blog-to-pdf
-cd $GOPATH/src/gitlab.com/thejini3/blog-to-pdf
+go get github.com/thejini3/blog-to-pdf
+cd $GOPATH/src/github.com/thejini3/blog-to-pdf
 go install
 ```
 
