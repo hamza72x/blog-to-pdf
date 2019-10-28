@@ -5,11 +5,11 @@ import (
 	"strconv"
 )
 
-const sampleConfigFileName = "blog_name.ini"
+const sampleConfigFileName = "blog_name"
 
 func generateIniFile() string {
 
-	var iniFileName = getConfigFileName(1)
+	var iniFileName = getConfigFileName(1) + ".ini"
 
 	f, err := os.Create(iniFileName)
 
@@ -38,8 +38,8 @@ func generateIniFile() string {
 func getConfigFileName(i int) string {
 	if !fileExists(sampleConfigFileName) {
 		return sampleConfigFileName
-	} else if !fileExists(sampleConfigFileName + strconv.Itoa(i)) {
-		return sampleConfigFileName + strconv.Itoa(i)
+	} else if !fileExists(sampleConfigFileName + "_" + strconv.Itoa(i)) {
+		return sampleConfigFileName + "_" + strconv.Itoa(i)
 	}
 	return getConfigFileName(i + 1)
 }
