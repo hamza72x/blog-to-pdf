@@ -12,7 +12,7 @@ go install
 ```
 Usage of blog-to-pdf:
 
-  $ blog-to-pdf init
+  $ blog-to-pdf init <dir_name>
   
   # Edit auto-generated .ini file, then -
 
@@ -23,7 +23,8 @@ Usage of blog-to-pdf:
 ## EXAMPLE
 
 ```
-$ blog-to-pdf init
+$ blog-to-pdf init amarspondon
+$ cd amarspondon
 $ blog-to-pdf amarspondon.ini
 ```
 
