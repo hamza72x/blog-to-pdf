@@ -232,3 +232,9 @@ func PrettyPrint(data interface{}) {
 func hashifyDollar(str string) string {
 	return strings.ReplaceAll(str, "$", "#")
 }
+func hashifyDollars(strs []string) []string {
+	for i, _ := range strs {
+		strs[i] = hashifyDollar(strs[i])
+	}
+	return strs
+}

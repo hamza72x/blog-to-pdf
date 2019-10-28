@@ -88,6 +88,7 @@ func changeSomeCfg() {
 
 	cfg.ArticleTitleClass = hashifyDollar(cfg.ArticleTitleClass)
 	cfg.ArticleParentElement = hashifyDollar(cfg.ArticleParentElement)
+	cfg.ElementsToRemove = hashifyDollars(cfg.ElementsToRemove)
 
 	SiteURL = cfg.Protocol + cfg.Domain
 

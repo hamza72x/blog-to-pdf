@@ -16,7 +16,7 @@ Usage of blog-to-pdf:
   
   # Edit auto-generated .ini file, then -
 
-  $ blog-to-pdf <your_config_file.ini>
+  $ blog-to-pdf <config_file.ini>
 
 ```
 

@@ -53,7 +53,7 @@ func handleFlagInit(dir string) {
 +		Now -
 +		$ cd ` + dir + `
 +		Edit ` + iniFN + ` according to your needs, then -
-+		$ blog-to-pdf ` + strReplaceFN + `
++		$ blog-to-pdf config.ini
 `
 	p(instruction)
 }

@@ -102,7 +102,7 @@ const ConstReplaces = `
 const ConstHelpStr = `
 +
 +	# Initialize
-+	$ blog-to-pdf init
++	$ blog-to-pdf init <dir_name>
 +
 +	# Edit your .ini file according to your need, then -
 +	$ blog-to-pdf <your_ini_file.ini>
