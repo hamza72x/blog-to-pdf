@@ -9,7 +9,7 @@ const sampleConfigFileName = "blog_name"
 
 func generateIniFile() string {
 
-	var iniFileName = getConfigFileName(1) + ".ini"
+	var iniFileName = getConfigFileName(1)
 
 	f, err := os.Create(iniFileName)
 
@@ -37,7 +37,7 @@ func generateIniFile() string {
 
 func getConfigFileName(i int) string {
 	if !fileExists(sampleConfigFileName + ".ini") {
-		return sampleConfigFileName
+		return sampleConfigFileName + ".ini"
 	} else if !fileExists(sampleConfigFileName + "_" + strconv.Itoa(i) + ".ini") {
 		return sampleConfigFileName + "_" + strconv.Itoa(i) + ".ini"
 	}
