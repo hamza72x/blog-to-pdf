@@ -48,21 +48,19 @@ func getURLContent(urlStr string) []byte {
 	return htmlBytes
 }
 
-func getFileContents(filePath string) []byte {
+func getFileBytes(filePath string) []byte {
 
 	file, err := os.Open(filePath)
-
-	if err != nil {
-		fmt.Println("Error reading file: " + filePath)
-	}
+	pErr("reading file "+filePath, err)
 
 	b, err := ioutil.ReadAll(file)
+	pErr("ioutil.ReadAll: "+filePath, err)
 
-	if err != nil {
-		fmt.Println("Error ioutil.ReadAll: " + filePath)
-	}
 	file.Close()
 	return b
+}
+func getFileStr(path string) string {
+	return string(getFileBytes(path))
 }
 func fileExists(filename string) bool {
 
@@ -156,6 +154,13 @@ func p(str string) {
 	fmt.Println("+ " + str)
 	fmt.Println("-------------------------------------------------------")
 }
+func pErr(title string, err error) {
+	if err != nil {
+		fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		fmt.Println("! Error " + title + ": " + err.Error())
+		fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	}
+}
 func pf(a ...interface{}) (n int, err error) {
 	fmt.Println("-------------------------------------------------------")
 	return fmt.Fprintln(os.Stdout, a...)
@@ -185,6 +190,17 @@ func strToArr(str string, sep string) []string {
 		sep,
 	)
 }
+func limitStrArr(strs []string, limit int) []string {
+	var newArr []string
+	for i, _ := range strs {
+		if i+1 > limit {
+			break
+		}
+		newArr = append(newArr, strs[i])
+	}
+	return newArr
+}
+
 func arrToStr(strs []string, sep string) string {
 	var str = ""
 	t := len(strs) - 1
@@ -195,27 +211,6 @@ func arrToStr(strs []string, sep string) string {
 		}
 	}
 	return str
-}
-
-// file data to []byte
-func FileDataToByte(filePath string) (byteValue []byte) {
-	// Open our jsonFile
-	jsonFile, err := os.Open(filePath)
-	// if we os.Open returns an error then handle it
-	if err != nil {
-		pp("Error opening file: " + err.Error())
-	}
-	// log.NoticeF("Successfully opened: %s", filePath)
-	// defer the closing of our file so that we can parse it later on
-	defer jsonFile.Close()
-	// get bytes
-	byteValue, err = ioutil.ReadAll(jsonFile)
-
-	if err != nil {
-		pp("Error ioutil.ReadAll: " + err.Error())
-	}
-
-	return
 }
 
 func PrettyPrint(data interface{}) {

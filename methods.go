@@ -20,9 +20,13 @@ func getHtmlFiles() []HtmlFile {
 	var htmlFiles []HtmlFile
 	var urls = getUrls()
 
+	// p("getUrls count: " + strconv.Itoa(len(getUrls())))
+
 	for i, urlStr := range urls {
 
-		if cfg.LimitUrlsNo > 0 && i == cfg.LimitUrlsNo-1 {
+		// fileNo := strconv.Itoa(i + 1)
+
+		if cfg.LimitUrlsNo > 0 && (i+1) > cfg.LimitUrlsNo {
 			break
 		}
 
@@ -45,21 +49,28 @@ func getHtmlFiles() []HtmlFile {
 		}
 
 		htmlFiles = append(htmlFiles, HtmlFile{
-			// Name:      getHtmlLocalFileNameFromUrl(urlStr),
 			LocalPath: localHtmlFilePath,
-			Content:   removeTags(getFileContents(localHtmlFilePath)),
+			Content:   removeTags(getFileBytes(localHtmlFilePath)),
 			URL:       urlStr,
 		})
 
 	}
-	p("Run again if app quits here!")
+	// pp("htmlFiles count: " + strconv.Itoa(len(htmlFiles)))
+	p("Run again, if app quits here!")
 	return htmlFiles
 }
 
 func getUrls() []string {
 
 	if !cfg.ForceUrlsFetch && fileExists(urlsTxtFilePath) == true {
-		return strToArr(string(getFileContents(urlsTxtFilePath)), "\n")
+
+		urls := strToArr(string(getFileBytes(urlsTxtFilePath)), "\n")
+
+		if cfg.LimitUrlsNo > 0 {
+			return limitStrArr(urls, cfg.LimitUrlsNo)
+		}
+
+		return urls
 	}
 
 	var urlStr = getUrlsFromSiteMap()
@@ -81,10 +92,17 @@ func getUrls() []string {
 
 	f.WriteString(urlStr)
 
-	return strToArr(urlStr, "\n")
+	urls := strToArr(urlStr, "\n")
+
+	if cfg.LimitUrlsNo > 0 {
+		return limitStrArr(urls, cfg.LimitUrlsNo)
+	}
+
+	return urls
 }
 
 func getUrlsFromSiteMap() string {
+
 	var allUrls = ""
 
 	smap, err := sitemap.Get(cfg.SiteMapURL, nil)
@@ -93,24 +111,11 @@ func getUrlsFromSiteMap() string {
 		fmt.Println("Site map get error: " + err.Error())
 	}
 
-	var iCount = len(smap.URLS) - 1
-
-	for i, url := range getSortedSiteMapURL(smap.URLS) {
-
+	for _, url := range getSortedSiteMapURL(smap.URLS) {
 		if ignoreURL(url.Loc) {
 			continue
 		}
-
-		if cfg.LimitUrlsNo > 0 && i == cfg.LimitUrlsNo-1 {
-			break
-		}
-
-		if iCount == i {
-			allUrls += url.Loc
-		} else {
-			allUrls += url.Loc + "\n"
-		}
-
+		allUrls += url.Loc + "\n"
 	}
 	return allUrls
 }

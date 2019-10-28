@@ -5,12 +5,12 @@ import (
 	"os"
 )
 
-func bootFlag() RunMode {
+func bootFlag() {
 
 	flag.Parse()
 
 	if len(flag.Args()) == 0 {
-		return RunModeFailed
+		runFailed()
 	}
 
 	if flag.Arg(0) == "init" {
@@ -18,7 +18,7 @@ func bootFlag() RunMode {
 		dir := flag.Arg(1)
 
 		if len(dir) == 0 {
-			return RunModeFailed
+			runFailed()
 		} else if pathExists(dir) {
 			pp("Dir `" + dir + "` already exists, use different name!")
 		}
@@ -27,14 +27,19 @@ func bootFlag() RunMode {
 		os.Exit(0)
 	}
 
-	flagIniPath = flag.Arg(0)
+	iniFilePath = flag.Arg(0)
 
-	if !fileExists(flagIniPath) {
-		ps("The ini file `" + flagIniPath + "` doesn't exist!")
+	if !fileExists(iniFilePath) {
+		ps("The ini file `" + iniFilePath + "` doesn't exist!")
 		pm("To auto-generate ini file, run  -")
 		pe("$ blog-to-pdf init")
 		os.Exit(0)
 	}
 
-	return RunModeGo
+}
+
+func runFailed() {
+	ps("\n+\tWrong instruction given!")
+	pe(ConstHelpStr)
+	pp("")
 }

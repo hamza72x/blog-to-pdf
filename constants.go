@@ -116,3 +116,17 @@ const ConstCusotmCss = `
 	 */ 
 
 `
+const ConstPageBreakClass = "wk-html-to-pdf-page-break"
+
+const ConstPageBreakCss = `
+@media print {
+  .` + ConstPageBreakClass + ` {
+    page-break-before: always;
+  }
+* {
+    page-break-inside: avoid;
+    page-break-after: avoid;
+    page-break-before: avoid;
+  }
+}
+`

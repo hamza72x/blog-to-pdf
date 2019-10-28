@@ -12,53 +12,21 @@ import (
 )
 
 type Range struct {
-	iMin int
-	iMax int
+	Min int
+	Max int
 }
 
 func buildAllHTMLS() {
 
-	files := getHtmlFiles()
+	htmLFiles := getHtmlFiles()
 
-	p("Run again if app quits here!")
-
-	totalFiles := len(files)
-
-	var articleRanges []Range
-
-	totalPdfCount := int(math.Floor(float64(totalFiles) / float64(cfg.ArticlePerPDF)))
-	lastIMax := 0
-
-	for i := 0; i < totalPdfCount; i++ {
-
-		iMax := (i + 1) * cfg.ArticlePerPDF
-		iMin := i * cfg.ArticlePerPDF
-
-		if iMax == totalFiles {
-			iMax = iMax - 1
-		}
-
-		if iMin != 0 {
-			iMin += 1
-		}
-
-		lastIMax = iMax
-
-		articleRanges = append(articleRanges, Range{iMin: iMin, iMax: iMax})
-	}
-
-	if totalFiles-1 > lastIMax {
-		articleRanges = append(articleRanges, Range{iMin: lastIMax + 1, iMax: totalFiles - 1})
-	}
-
-	// fmt.Printf("articleRanges: %+v", articleRanges)
-	// panic("END")
-
-	for i, theRange := range articleRanges {
+	for i, theRange := range getRanges(len(htmLFiles)) {
 		var pdfFiles []HtmlFile
-		for i := theRange.iMin; i <= theRange.iMax; i++ {
-			pdfFiles = append(pdfFiles, files[i])
+		for i := theRange.Min; i <= theRange.Max; i++ {
+			pdfFiles = append(pdfFiles, htmLFiles[i-1])
 		}
+		// PrettyPrint(pdfFiles)
+		// pp("")
 		createHTML(pdfFiles, theRange, i)
 	}
 
@@ -69,14 +37,16 @@ func createHTML(files []HtmlFile, theRange Range, fileNo int) {
 	firstHtmlFile := files[0]
 
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader([]byte(firstHtmlFile.Content)))
+	pErr("goquery.NewDocumentFromReader", err)
+
+	head := doc.Find("head")
+
+	head.AppendHtml("<style>" + ConstPageBreakCss + "</style>")
 
 	if fileExists(cfg.CustomCssFile) {
-		doc.Find("head").AppendHtml(`<style>` + string(FileDataToByte(cfg.CustomCssFile)) + `</style>`)
+		head.AppendHtml(`<style>` + getFileStr(cfg.CustomCssFile) + `</style>`)
 	}
 
-	if err != nil {
-		pp("Error goquery.NewDocumentFromReader:" + err.Error())
-	}
 
 	for i := 1; i < fCount; i++ {
 		articleParent := doc.Find(cfg.ArticleParentElement)
@@ -85,7 +55,7 @@ func createHTML(files []HtmlFile, theRange Range, fileNo int) {
 	}
 
 	doc.Find(cfg.ArticleTitleClass).Each(func(i int, s *goquery.Selection) {
-		s.PrependHtml("[" + strconv.Itoa(theRange.iMin+i+1) + "] ")
+		s.PrependHtml("[" + strconv.Itoa(theRange.Min+i) + "] ")
 	})
 
 	docHtmlStr, err := doc.Selection.Html()
@@ -94,7 +64,7 @@ func createHTML(files []HtmlFile, theRange Range, fileNo int) {
 		pp("Error doc.Selection.Html:" + err.Error())
 	}
 
-	htmlFilePath := fmt.Sprintf(combinedHtmlDir+"/%d-%d_"+cfg.Domain+".html", theRange.iMin+1, theRange.iMax+1)
+	htmlFilePath := fmt.Sprintf(combinedHtmlDir+"/%d-%d_"+cfg.Domain+".html", theRange.Min, theRange.Max)
 
 	osFile, err := os.Create(htmlFilePath)
 	if err != nil {
@@ -109,7 +79,7 @@ func createHTML(files []HtmlFile, theRange Range, fileNo int) {
 
 	if cfg.GeneratePDF {
 		htmlToPDF(htmlFilePath,
-			fmt.Sprintf(pdfDir+"/%d-%d_"+cfg.Domain+".pdf", theRange.iMin+1, theRange.iMax+1), fileNo,
+			fmt.Sprintf(pdfDir+"/%d-%d_"+cfg.Domain+".pdf", theRange.Min, theRange.Max), fileNo,
 		)
 	}
 }
@@ -152,4 +122,38 @@ func htmlToPDF(htmlFilePath string, pdfFilePath string, i int) {
 	if pdfg.Buffer().Len() != len(pdfg.Bytes()) {
 		fmt.Println("Buffersize not equal: " + pdfFilePath)
 	}
+}
+
+func getRanges(totalHtmlCount int) []Range {
+
+	var ranges []Range
+
+	// ps("totalHtmlFiles: " + strconv.Itoa(totalHtmlCount))
+	totalPdfCount := int(math.Floor(float64(totalHtmlCount) / float64(cfg.ArticlePerPDF)))
+	// pm("totalPdfCount: " + strconv.Itoa(totalPdfCount))
+	lastMax := 0
+
+	for i := 0; i < totalPdfCount; i++ {
+
+		min := lastMax + 1
+		max := (i + 1) * cfg.ArticlePerPDF
+
+		if max > totalHtmlCount {
+			max = totalHtmlCount
+		}
+
+		lastMax = max
+
+		ranges = append(ranges, Range{Min: min, Max: max})
+
+	}
+
+	if totalHtmlCount > lastMax {
+		ranges = append(ranges, Range{Min: lastMax + 1, Max: totalHtmlCount})
+	}
+
+	// PrettyPrint(ranges)
+
+	return ranges
+
 }

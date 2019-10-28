@@ -7,7 +7,7 @@ import (
 )
 
 /*
-flagIniPath 	= ./any_blog.com.ini
+flagIniPath 	= ./config.ini
 urlsTxtFilePath = ./any_blog.com/urls.txt
 originalHtmlDir = ./any_blog.com/original-html
 combinedHtmlDir = ./any_blog.com/combined-html
@@ -23,68 +23,44 @@ var urlsTxtFilePath string
 var cfgFile *ini.File
 var errIni error
 
-var flagIniPath string
+var iniFilePath string
 var cfg IniData
 var strReplaces []StringReplace
 var SiteURL string
 
 func main() {
-
-	switch bootFlag() {
-
-	case RunModeInit:
-
-		break
-
-	case RunModeFailed:
-
-		ps("\n+\tWrong instruction given!")
-		pe(ConstHelpStr)
-
-	case RunModeGo:
-		boot()
-		p("IF app stops here, then just run again!")
-		buildAllHTMLS()
-	}
-
+	bootFlag()
+	successBoot()
+	p("IF app stops here, then just run again!")
+	buildAllHTMLS()
 }
 
-func boot() {
+func successBoot() {
 
 	loadCfg()
-	parseCfg()
-	changeSomeCfg()
+	parseCfgFile()
+	modifyPostCfgInit()
 	printLoadedCfg()
 
 	if fileExists(cfg.StringReplacesFile) {
-
-		err := json.Unmarshal(FileDataToByte(cfg.StringReplacesFile), &strReplaces)
-
-		if err != nil {
-			ps("Error parsing (" + cfg.StringReplacesFile + ") : " + err.Error())
-		}
+		err := json.Unmarshal(getFileBytes(cfg.StringReplacesFile), &strReplaces)
+		pErr("parsing ("+cfg.StringReplacesFile+")", err)
 	}
 
 	bootPaths()
 }
 
 func loadCfg() {
-	cfgFile, errIni = ini.Load(flagIniPath)
-
-	if errIni != nil {
-		pp("Error loading ini file: " + errIni.Error())
-	}
+	cfgFile, errIni = ini.Load(iniFilePath)
+	pErr("loading ini file", errIni)
 }
 
-func parseCfg() {
+func parseCfgFile() {
 	err := cfgFile.Section("").MapTo(&cfg)
-
-	if err != nil {
-		pp("Error mapping ini file, probably bad data!\n Error Details: " + err.Error())
-	}
+	pErr("mapping ini file, probably bad data!", err)
 }
 
-func changeSomeCfg() {
+func modifyPostCfgInit() {
 
 	cfg.ArticleTitleClass = hashifyDollar(cfg.ArticleTitleClass)
 	cfg.ArticleParentElement = hashifyDollar(cfg.ArticleParentElement)

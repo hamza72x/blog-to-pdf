@@ -14,7 +14,10 @@ func getContent(htmlFile HtmlFile) string {
 		panic(err)
 	}
 
-	content, err = doc.Find(cfg.ArticleParentElement).Html()
+	var articleParent = doc.Find(cfg.ArticleParentElement)
+	articleParent.Children().First().AddClass(ConstPageBreakClass)
+
+	content, err = articleParent.Html()
 
 	if err != nil {
 		panic(err)
