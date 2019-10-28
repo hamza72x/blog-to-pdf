@@ -53,39 +53,48 @@ func main() {
 
 func boot() {
 
-	cfgFile, errIni = ini.Load(flagIniPath)
+	loadCfg()
+	parseCfg()
+	changeSomeCfg()
+	printLoadedCfg()
 
-	if errIni != nil {
-		pp("Error loading ini file: " + errIni.Error())
-	}
+	if fileExists(cfg.StringReplacesFile) {
 
-	err := cfgFile.Section("").MapTo(&cfg)
-
-	if err != nil {
-		pp("Error .MapTo(iniData): " + err.Error())
-	}
-
-	SiteURL = cfg.Protocol + cfg.Domain
-
-	if !strings.Contains(cfg.SiteMapURL, "https://") || !strings.Contains(cfg.SiteMapURL, "http://") {
-		cfg.SiteMapURL = cfg.Protocol + cfg.SiteMapURL
-	}
-
-	PrettyPrint(&cfg)
-
-	if !fileExists(cfg.StringReplacesFile) {
-
-		p("No string replace file! Try running $ blog-to-pdf init")
-
-	} else {
-
-		err = json.Unmarshal(FileDataToByte(cfg.StringReplacesFile), &strReplaces)
+		err := json.Unmarshal(FileDataToByte(cfg.StringReplacesFile), &strReplaces)
 
 		if err != nil {
 			ps("Error parsing (" + cfg.StringReplacesFile + ") : " + err.Error())
 		}
 	}
 
-
 	bootPaths()
+}
+
+func loadCfg() {
+	cfgFile, errIni = ini.Load(flagIniPath)
+
+	if errIni != nil {
+		pp("Error loading ini file: " + errIni.Error())
+	}
+}
+
+func parseCfg() {
+	err := cfgFile.Section("").MapTo(&cfg)
+
+	if err != nil {
+		pp("Error .MapTo(iniData): " + err.Error())
+	}
+}
+
+func changeSomeCfg() {
+	SiteURL = cfg.Protocol + cfg.Domain
+
+	if !strings.Contains(cfg.SiteMapURL, "https://") || !strings.Contains(cfg.SiteMapURL, "http://") {
+		cfg.SiteMapURL = cfg.Protocol + cfg.SiteMapURL
+	}
+}
+func printLoadedCfg() {
+	ps("[CONFIG STARTS]")
+	PrettyPrint(&cfg)
+	pe("[CONFIG ENDS]")
 }
