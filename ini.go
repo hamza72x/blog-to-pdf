@@ -36,10 +36,10 @@ func generateIniFile() string {
 }
 
 func getConfigFileName(i int) string {
-	if !fileExists(sampleConfigFileName) {
+	if !fileExists(sampleConfigFileName + ".ini") {
 		return sampleConfigFileName
-	} else if !fileExists(sampleConfigFileName + "_" + strconv.Itoa(i)) {
-		return sampleConfigFileName + "_" + strconv.Itoa(i)
+	} else if !fileExists(sampleConfigFileName + "_" + strconv.Itoa(i) + ".ini") {
+		return sampleConfigFileName + "_" + strconv.Itoa(i) + ".ini"
 	}
 	return getConfigFileName(i + 1)
 }
