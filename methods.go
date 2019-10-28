@@ -22,7 +22,7 @@ func getHtmlFiles() []HtmlFile {
 
 	for i, urlStr := range urls {
 
-		if cfg.IsTestRun && i == 11 {
+		if cfg.limitUrls > 0 && i == cfg.limitUrls-1 {
 			break
 		}
 
@@ -101,7 +101,7 @@ func getUrlsFromSiteMap() string {
 			continue
 		}
 
-		if cfg.IsTestRun && i == 11 {
+		if cfg.limitUrls > 0 && i == cfg.limitUrls-1 {
 			break
 		}
 

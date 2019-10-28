@@ -11,7 +11,7 @@ type IniData struct {
 	StringReplacesFile   string   `ini:"string_replaces_file"`
 	ForceFetchHtml       bool     `ini:"force_html_fetch"`
 	ForceUrlsFetch       bool     `ini:"force_urls_fetch"`
-	IsTestRun            bool     `ini:"is_test_run"`
+	limitUrls            int     `ini:"limit_urls"`
 	GeneratePDF          bool     `ini:"generate_pdf"`
 	PdfPageSize          string   `ini:"pdf_size"`
 	PdfOrientation       string   `ini:"pdf_orientation"`

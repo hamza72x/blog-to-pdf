@@ -5,20 +5,20 @@ const ConstUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X)
 
 const ConstSampleINI = `protocol = https://
 
-domain = any_blog.com
+domain = your_blog.com
 
-sitemap_url = any_blog.com/sitemap.xml
+sitemap_url = your_blog.com/sitemap.xml
 
 article_per_pdf = 10
 
 # This is one of the important value, since we will merge (article_per_pdf) 10 article in a single PDF
 # so, which portion of the HTML will be merged in the main Layout? Ex: 'div#content', 'div.post', 'article'
-article_parent_element = body
+article_parent_element = #content
 
-article_title_class = h3.post-title
+article_title_class = .post h2.entry-title
 
 # for "id", use "$" instead of "#"
-elements_to_remove = .comment-form, .post-footer, .post-sidebar, .share-buttons-container, footer, $jp-post-flair, $wpcom-block-editor-styles-css, .wpcnt, .respond, link[rel=dns-prefetch], .back-button-container, .subscribe-section-container, $PopularPosts1, .comment-replybox-thread, .back-button-container, .footer, aside, .sidebar, .search, form,
+elements_to_remove = footer, aside, .respond, $wpcom-block-editor-styles-css, link[rel="dns-prefetch"], .wpcnt, $jp-post-flair, .post-nav-wrapper, .menu-wrapper
 
 # There will be in need of some REPLACES, that's why had to use JSON file,
 # Make sure that's valid JSON file
@@ -29,14 +29,14 @@ string_replaces_file = string_replaces.any_blog.com.json
 force_html_fetch = false
 
 # Force Re-fetch urls from sitemap / by wget
-force_urls_fetch = false
+force_urls_fetch = true
 
-# if yes, then it will work with only 10 urls
-is_test_run = false
-
+# -1 => fetch all url
+# otherwise, you can limit number of urls
+limit_urls = -1
 
 # Generate pdf or not, if false then only combined-html files will be created!
-generate_pdf = true
+generate_pdf = false
 
 # A0        =>	841 x 1189 mm
 # A1        =>	594 x 841 mm
@@ -78,8 +78,7 @@ pdf_orientation = Portrait
 
 
 # UI
-# font_size = 1.5em
-# font_family = "Kohinoor Bangla", "Kalpurush", "Open Sans", serif
+custom_css_file = custom.css
 
 # Margin / White spaces for pdf (mm)
 pdf_margin_top = 3
