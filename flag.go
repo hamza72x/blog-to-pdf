@@ -5,20 +5,16 @@ import (
 	"os"
 )
 
-func bootFlag() RunMode {
+func bootFlag() (RunMode, string) {
 
 	flag.Parse()
 
 	if len(flag.Args()) == 0 {
-		return RunModeFailed
+		return RunModeFailed, ""
 	}
 
 	if flag.Arg(0) == "init" {
-
-		generateIniFile()
-
-		return RunModeInit
-
+		return RunModeInit, generateIniFile()
 	}
 
 	flagIniPath = flag.Arg(0)
@@ -30,5 +26,5 @@ func bootFlag() RunMode {
 		os.Exit(0)
 	}
 
-	return RunModeGo
+	return RunModeGo, ""
 }

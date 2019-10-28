@@ -7,9 +7,11 @@ import (
 
 const sampleConfigFileName = "blog_name.ini"
 
-func generateIniFile() {
+func generateIniFile() string {
 
-	f, err := os.Create(getConfigFileName(1))
+	var iniFileName = getConfigFileName(1)
+
+	f, err := os.Create(iniFileName)
 
 	if err != nil {
 		pp("Error creating ini file: " + err.Error())
@@ -29,6 +31,8 @@ func generateIniFile() {
 	f.WriteString(ConstSampleINI)
 	f2.WriteString(ConstReplaces)
 	f3.WriteString(ConstCusotmCss)
+
+	return iniFileName
 }
 
 func getConfigFileName(i int) string {

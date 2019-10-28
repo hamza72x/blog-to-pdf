@@ -30,13 +30,15 @@ var SiteURL string
 
 func main() {
 
-	switch bootFlag() {
+	var flagInfo, iniFileName = bootFlag()
+
+	switch flagInfo {
 
 	case RunModeInit:
 
 		ps("Initialized the ini file!")
 		pm("Now run - ")
-		pe("$ blog-to-pdf --ini=configs.any_blog.com.ini")
+		pe("$ blog-to-pdf " + iniFileName)
 
 	case RunModeFailed:
 
