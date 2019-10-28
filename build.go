@@ -50,7 +50,7 @@ func createHTML(files []HtmlFile, theRange Range, fileNo int) {
 
 	for i := 1; i < fCount; i++ {
 		articleParent := doc.Find(cfg.ArticleParentElement)
-		articleParent.AppendHtml(`<br/><hr/><hr/><br/>`)
+		articleParent.AppendHtml(`<hr/>`)
 		articleParent.AppendHtml(getContent(files[i]))
 	}
 

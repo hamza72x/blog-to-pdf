@@ -127,6 +127,9 @@ const ConstCusotmCss = `
 	h1, h2, h3, h4 {
 		font-weight: 900 !important;
 	}
+	h1 a, h2 a, h3 a, h4 a {
+		font-weight: 900 !important;
+	}
 
 `
 const ConstPageBreakClass = "wk-html-to-pdf-page-break"
