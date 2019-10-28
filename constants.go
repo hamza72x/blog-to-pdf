@@ -124,12 +124,17 @@ const ConstCusotmCss = `
 		background: #FFF !important;
 	}
 
+	h1, h2, h3, h4 {
+		font-weight: 900 !important;
+	}
+
 `
 const ConstPageBreakClass = "wk-html-to-pdf-page-break"
 
 const ConstPageBreakCss = `
   .` + ConstPageBreakClass + ` {
     page-break-before: always;
+    padding-top: 20px !important;
   }
 `
 
