@@ -82,7 +82,7 @@ func parseCfg() {
 	err := cfgFile.Section("").MapTo(&cfg)
 
 	if err != nil {
-		pp("Error .MapTo(iniData): " + err.Error())
+		pp("Error mapping ini file, probably bad data!\n Error Details: " + err.Error())
 	}
 }
 

@@ -16,7 +16,7 @@ Usage of blog-to-pdf:
   
   # Edit auto-generated .ini file, then -
 
-  $ blog-to-pdf --ini=<your_config_file.ini>
+  $ blog-to-pdf <your_config_file.ini>
 
 ```
 
@@ -24,6 +24,6 @@ Usage of blog-to-pdf:
 
 ```
 $ blog-to-pdf init
-$ blog-to-pdf --ini=amarspondon.wordpress.com.ini
+$ blog-to-pdf amarspondon.ini
 ```
 

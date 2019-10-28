@@ -7,10 +7,6 @@ import (
 
 func bootFlag() RunMode {
 
-	flag.StringVar(&flagIniPath, "ini", "-",
-		"(REQUIRED) Pass -ini to execute that config!",
-	)
-
 	flag.Parse()
 
 	if len(flag.Args()) == 0 {
@@ -25,9 +21,11 @@ func bootFlag() RunMode {
 
 	}
 
+	flagIniPath = flag.Arg(0)
+
 	if !fileExists(flagIniPath) {
-		ps(flagIniPath + " doesn't exist!")
-		pm("To create ini file, run  -")
+		ps("The ini file `" + flagIniPath + "` doesn't exist!")
+		pm("To auto-generate ini file, run  -")
 		pe("$ blog-to-pdf init")
 		os.Exit(0)
 	}

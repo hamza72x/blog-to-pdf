@@ -2,7 +2,6 @@ package main
 
 const ConstUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1"
 
-
 const ConstSampleINI = `protocol = https://
 
 domain = your_blog.com
@@ -104,7 +103,7 @@ const ConstHelpStr = `
 +	$ blog-to-pdf init
 +
 +	# Edit your .ini file according to your need, then -
-+	$ blog-to-pdf go --ini=<your_ini_file.ini>
++	$ blog-to-pdf <your_ini_file.ini>
 +
 `
 
