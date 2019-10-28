@@ -15,7 +15,7 @@ func removeTags(htmlBytes []byte) string {
 	}
 
 	for _, tag := range cfg.ElementsToRemove {
-		doc.Find(strings.ReplaceAll(tag, "$", "#")).Remove()
+		doc.Find(hashifyDollar(tag)).Remove()
 	}
 
 	htmlStr, err := doc.Html()

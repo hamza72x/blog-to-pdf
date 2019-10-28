@@ -30,15 +30,11 @@ var SiteURL string
 
 func main() {
 
-	var flagInfo, iniFileName = bootFlag()
-
-	switch flagInfo {
+	switch bootFlag() {
 
 	case RunModeInit:
 
-		ps("Initialized the ini file!")
-		pm("Now run - ")
-		pe("$ blog-to-pdf " + iniFileName)
+		break
 
 	case RunModeFailed:
 
@@ -89,6 +85,10 @@ func parseCfg() {
 }
 
 func changeSomeCfg() {
+
+	cfg.ArticleTitleClass = hashifyDollar(cfg.ArticleTitleClass)
+	cfg.ArticleParentElement = hashifyDollar(cfg.ArticleParentElement)
+
 	SiteURL = cfg.Protocol + cfg.Domain
 
 	if !strings.Contains(cfg.SiteMapURL, "https://") || !strings.Contains(cfg.SiteMapURL, "http://") {

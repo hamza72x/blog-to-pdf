@@ -5,16 +5,26 @@ import (
 	"os"
 )
 
-func bootFlag() (RunMode, string) {
+func bootFlag() RunMode {
 
 	flag.Parse()
 
 	if len(flag.Args()) == 0 {
-		return RunModeFailed, ""
+		return RunModeFailed
 	}
 
 	if flag.Arg(0) == "init" {
-		return RunModeInit, generateIniFile()
+
+		dir := flag.Arg(1)
+
+		if len(dir) == 0 {
+			return RunModeFailed
+		} else if pathExists(dir) {
+			pp("Dir `" + dir + "` already exists, use different name!")
+		}
+
+		handleFlagInit(dir)
+		os.Exit(0)
 	}
 
 	flagIniPath = flag.Arg(0)
@@ -26,5 +36,5 @@ func bootFlag() (RunMode, string) {
 		os.Exit(0)
 	}
 
-	return RunModeGo, ""
+	return RunModeGo
 }

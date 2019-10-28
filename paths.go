@@ -3,30 +3,29 @@ package main
 import "os"
 
 /*
-flagIniPath 	= ./any_blog.com.ini
-urlsTxtFilePath = ./any_blog.com/urls.txt
-originalHtmlDir = ./any_blog.com/original-html
-combinedHtmlDir = ./any_blog.com/combined-html
-pdfDir 			= ./any_blog.com/pdf
+flagIniPath 	= ./blog_name.ini
+urlsTxtFilePath = ./urls.txt
+originalHtmlDir = ./original-html
+combinedHtmlDir = ./combined-html
+pdfDir 			= ./pdf
  */
 
 func bootPaths() {
 
+	urlsTxtFilePath = "./urls.txt"
+	originalHtmlDir = "./original-html"
+	combinedHtmlDir = "./combined-html"
+	pdfDir = "./pdf"
 
-	urlsTxtFilePath =  "./" + cfg.Domain + "/" + "urls.txt"
-	originalHtmlDir =  "./" + cfg.Domain + "/original-html"
-	combinedHtmlDir =  "./" + cfg.Domain + "/combined-html"
-	pdfDir 			=  "./" + cfg.Domain + "/pdf"
-
-	createDirs(
+	createDirsIfNotExists(
 		[]string{originalHtmlDir, combinedHtmlDir, pdfDir},
 	)
 }
 
-func createDirs(dirs []string) {
+func createDirsIfNotExists(dirs []string) {
 	for _, path := range dirs {
-		if _, err := os.Stat(path); os.IsNotExist(err) {
-			err = os.MkdirAll(path, os.ModePerm)
+		if !pathExists(path) {
+			err := os.MkdirAll(path, os.ModePerm)
 			if err != nil {
 				p("Error creating directory: " + err.Error())
 			}

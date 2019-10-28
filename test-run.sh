@@ -1,4 +1,5 @@
 go install
 cd storage
-blog-to-pdf --ini=dev.ini
-cd ..
+blog-to-pdf init amarspondhon
+# blog-to-pdf amarspondhon
+# cd .

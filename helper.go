@@ -8,6 +8,8 @@ import (
 	"os"
 	"net/http"
 	"encoding/json"
+	"regexp"
+	"log"
 )
 
 func getURLContent(urlStr string) []byte {
@@ -71,14 +73,20 @@ func fileExists(filename string) bool {
 	}
 	return !info.IsDir()
 }
+func pathExists(path string) bool {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return false
+	}
+	return true
+}
 
-//func getHtmlLocalFileNameFromUrl(urlStr string) string {
-//	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	return reg.ReplaceAllString(urlStr, "")
-//}
+func AZ_AND_NUMBER_ONLY(urlStr string) string {
+	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return reg.ReplaceAllString(urlStr, "")
+}
 
 func checkDomain(name string) error {
 
@@ -219,4 +227,8 @@ func PrettyPrint(data interface{}) {
 		return
 	}
 	fmt.Printf("%s \n", p)
+}
+
+func hashifyDollar(str string) string {
+	return strings.ReplaceAll(str, "$", "#")
 }

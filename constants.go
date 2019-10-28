@@ -12,9 +12,11 @@ article_per_pdf = 10
 
 # This is one of the important value, since we will merge (article_per_pdf) 10 article in a single PDF
 # so, which portion of the HTML will be merged in the main Layout? Ex: 'div#content', 'div.post', 'article'
-article_parent_element = #content
+# for "id", use "$" instead of "#"
+article_parent_element = $content
 
-article_title_class = .post h2.entry-title
+# for "id", use "$" instead of "#"
+article_title_class = .post h2$entry-title
 
 # for "id", use "$" instead of "#"
 elements_to_remove = footer, aside, .respond, $wpcom-block-editor-styles-css, link[rel="dns-prefetch"], .wpcnt, $jp-post-flair, .post-nav-wrapper, .menu-wrapper
@@ -22,7 +24,7 @@ elements_to_remove = footer, aside, .respond, $wpcom-block-editor-styles-css, li
 # There will be in need of some REPLACES, that's why had to use JSON file,
 # Make sure that's valid JSON file
 
-string_replaces_file = string_replaces.any_blog.com.json
+string_replaces_file = string_replaces.json
 
 # Force Re-fetch htmls from server
 force_html_fetch = false
