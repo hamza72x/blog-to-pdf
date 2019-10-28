@@ -131,9 +131,10 @@ const ConstPageBreakCss = `
   .` + ConstPageBreakClass + ` {
     page-break-before: always;
   }
-* {
-    page-break-inside: avoid;
-    page-break-after: avoid;
-    page-break-before: avoid;
-  }
 `
+
+// * {
+//     page-break-inside: avoid;
+//     page-break-after: avoid;
+//     page-break-before: avoid;
+//   }
