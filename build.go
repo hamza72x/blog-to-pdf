@@ -28,21 +28,22 @@ func build() {
 	}
 
 }
-func getPdfiles(allHTMLFiles []xHTMLFile) (outFiles []xPdfile) {
+func getPdfiles(allHTMLFiles []xHTMLFile) []xPdfile {
+	var pdfiles []xPdfile
 
 	for i, theRange := range getRanges(len(allHTMLFiles)) {
 
 		var htmls []xHTMLFile
 
-		for i := theRange.Min; i <= theRange.Max; i++ {
+		for i := theRange.Start; i <= theRange.End; i++ {
 			htmls = append(htmls, allHTMLFiles[i-1])
 		}
 
-		outFiles = append(outFiles,
-			xPdfile{htmls, theRange, i},
+		pdfiles = append(pdfiles,
+			xPdfile{i + 1, htmls, theRange},
 		)
 	}
-	return
+	return pdfiles
 }
 
 func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
@@ -50,7 +51,7 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 	// one pdf/doc will have multiple html file
 	htmls := pdfile.HTMLFiles
 	theRange := pdfile.TheRange
-	fileNo := pdfile.FileNo
+	serial := pdfile.Serial
 
 	htmlTemplate, err := goquery.NewDocumentFromReader(bytes.NewReader([]byte(htmlTemplate)))
 	hel.PErr("[1] goquery.NewDocumentFromReader", err)
@@ -64,7 +65,7 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 
 	htmlContainer.AppendHtml(strings.ReplaceAll(frontAndBackPage,
 		"title_placeholder",
-		fmt.Sprintf("%d-%d_"+cfg.PdfFileName, theRange.Min, theRange.Max)),
+		fmt.Sprintf("%d-%d_"+cfg.PdfFileName, theRange.Start, theRange.End)),
 	)
 	// combine html files
 	// according to range
@@ -88,7 +89,7 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 	// set [i] in title
 	htmlContainer.Find(cfg.ArticleTitleClass).Each(func(i int, s *goquery.Selection) {
 		if cfg.AppendAutoArticleNumberInTitle {
-			s.PrependHtml("[" + strconv.Itoa(theRange.Min+i) + "] ")
+			s.PrependHtml("[" + strconv.Itoa(theRange.Start+i) + "] ")
 			s.AddClass("text-center")
 		}
 		if cfg.AppendURLInTitle {
@@ -106,7 +107,7 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 		strings.ReplaceAll(
 			strings.ReplaceAll(frontAndBackPage, `the-page-break-class`, ""),
 			"title_placeholder",
-			fmt.Sprintf("%d-%d_"+cfg.PdfFileName, theRange.Min, theRange.Max),
+			fmt.Sprintf("%d-%d_"+cfg.PdfFileName, theRange.Start, theRange.End),
 		),
 	)
 
@@ -117,14 +118,14 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 
 	combinedHTMLFilePath := fmt.Sprintf(
 		combinedHTMLDir+"/%d-%d_"+cfg.Domain+".html",
-		theRange.Min,
-		theRange.Max,
+		theRange.Start,
+		theRange.End,
 	)
 
 	osFile, err := os.Create(combinedHTMLFilePath)
 	hel.PErr("os.Create(htmlFilePath)", err)
 
-	hel.PS(fmt.Sprintf("%d: Generated Combined HTML File: "+combinedHTMLFilePath, fileNo+1))
+	hel.PS(fmt.Sprintf("%d: Generated Combined HTML File: "+combinedHTMLFilePath, serial))
 
 	osFile.WriteString(combinedHTMLStr)
 
@@ -132,12 +133,12 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 
 	if cfg.GeneratePDF {
 
-		var pdfFilePath = fmt.Sprintf(cfg.PdfOutputDirPath+"/%d-%d_"+cfg.PdfFileName+".pdf", theRange.Min, theRange.Max)
+		var pdfFilePath = fmt.Sprintf(cfg.PdfOutputDirPath+"/%d-%d_"+cfg.PdfFileName+".pdf", theRange.Start, theRange.End)
 
 		if cfg.SkipPDFCreationIfExistsAlready && hel.FileExists(pdfFilePath) {
-			hel.PE(fmt.Sprintf("%d: [SkipPDFCreationIfExistsAlready] Already exists!", fileNo))
+			hel.PE(fmt.Sprintf("%d: [SkipPDFCreationIfExistsAlready] Already exists!", serial))
 		} else {
-			htmlToPDF(combinedHTMLFilePath, pdfFilePath, fileNo)
+			htmlToPDF(combinedHTMLFilePath, pdfFilePath, serial)
 		}
 
 	} else {
@@ -145,9 +146,9 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 	}
 }
 
-func htmlToPDF(htmlFilePath string, pdfFilePath string, i int) {
+func htmlToPDF(htmlFilePath string, pdfFilePath string, serial int) {
 
-	hel.PM(fmt.Sprintf("%d: Creating PDF File!", i+1))
+	hel.PM(fmt.Sprintf("%d: Creating PDF File!", serial))
 
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	hel.ErrOSExit("wkhtmltopdf.NewPDFGenerator", err)
@@ -172,7 +173,7 @@ func htmlToPDF(htmlFilePath string, pdfFilePath string, i int) {
 	err = pdfg.WriteFile(pdfFilePath)
 	hel.ErrOSExit("pdfg.WriteFile", err)
 
-	hel.PE(fmt.Sprintf("%d: Generated PDF size %vkB: %v", i+1, len(pdfg.Bytes())/1024, pdfFilePath))
+	hel.PE(fmt.Sprintf("%d: Generated PDF size %vkB: %v", serial, len(pdfg.Bytes())/1024, pdfFilePath))
 
 	if pdfg.Buffer().Len() != len(pdfg.Bytes()) {
 		fmt.Println("Buffersize not equal: " + pdfFilePath)
@@ -184,25 +185,25 @@ func getRanges(totalHTMLCount int) []xRange {
 	var ranges []xRange
 
 	totalPdfCount := int(math.Floor(float64(totalHTMLCount) / float64(cfg.ArticlePerPDF)))
-	lastMax := 0
+	lastEnd := 0
 
 	for i := 0; i < totalPdfCount; i++ {
 
-		min := lastMax + 1
-		max := (i + 1) * cfg.ArticlePerPDF
+		start := lastEnd + 1
+		end := (i + 1) * cfg.ArticlePerPDF
 
-		if max > totalHTMLCount {
-			max = totalHTMLCount
+		if end > totalHTMLCount {
+			end = totalHTMLCount
 		}
 
-		lastMax = max
+		lastEnd = end
 
-		ranges = append(ranges, xRange{Min: min, Max: max})
+		ranges = append(ranges, xRange{Start: start, End: end})
 
 	}
 
-	if totalHTMLCount > lastMax {
-		ranges = append(ranges, xRange{Min: lastMax + 1, Max: totalHTMLCount})
+	if totalHTMLCount > lastEnd {
+		ranges = append(ranges, xRange{Start: lastEnd + 1, End: totalHTMLCount})
 	}
 
 	return ranges

@@ -33,9 +33,10 @@ type xCFG struct {
 	PdfMarginBottom                int      `ini:"pdf_margin_bottom"`
 }
 
+// a pdf will have multiple html files
 type xRange struct {
-	Min int // 1 based, i.e not 0 based -_-
-	Max int
+	Start int // 1 based, i.e not 0 based -_-
+	End   int
 }
 
 type xHTMLFile struct {
@@ -44,9 +45,9 @@ type xHTMLFile struct {
 }
 
 type xPdfile struct {
+	Serial    int // 1 based
 	HTMLFiles []xHTMLFile
 	TheRange  xRange
-	FileNo    int
 }
 
 func (hf *xHTMLFile) fileBytes() []byte {
