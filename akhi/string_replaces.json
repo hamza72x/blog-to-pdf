@@ -1,0 +1,10 @@
+
+[
+	{"serial": 1, "data": {"<script src=\"//stats.wp.com/w.js?60\" type=\"text/javascript\" async=\"\" defer=\"\"></script>": ""}},
+	{"serial": 2, "data": {",v=\"//\"": ",v=\"https://\""}},
+	{"serial": 3, "data": {"=\"//": "=\"https://"}},
+	{"serial": 4, "data": {" dir=\"ltr\"": ""}},
+	{"serial": 5, "data": {"<div><span>": "<p>"}},
+	{"serial": 6, "data": {"<div ><span >": "<p>"}},
+	{"serial": 7, "data": {"</span></div>": "</p>"}}
+]

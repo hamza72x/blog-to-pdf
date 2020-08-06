@@ -142,7 +142,7 @@ func buildCombinedHTMLAndGeneratePDF(sof singleOutFileStruct) {
 		}
 
 	} else {
-		hel.PE("Skipping pdf generation as it's disabled in `" + iniFilePath + "`")
+		hel.PE("Skipping pdf generation as it's disabled in `" + cfgFilePath + "`")
 	}
 }
 

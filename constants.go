@@ -150,19 +150,18 @@ const constReplacesJSONPatternStr = `
 `
 
 const constHelpStr = `
-+
-+	# Print config to terminal
-+	$ blog-to-pdf echo-config.ini
-+
-+	# Initialize
-+	$ blog-to-pdf init <dir_name>
-+
-+	# Edit your .ini file according to your need, then -
-+	$ blog-to-pdf <your_ini_file.ini>
-+
-+   # Generate a sample ini, if needed
-+   $ blog-to-pdf generate-ini
-+
+# Usage
+
+-c string
+	(required) run the config file, ex: blog-to-pdf -c config.ini
+-d string
+	(required, if -i is passed) initialization directory name, ex: blog-to-pdf -i -d any-blog-name
+-ec
+	print sample config data to console. ex: blog-to-pdf -ec
+-gc
+	create sample config file. ex: blog-to-pdf -gc
+-i	initialize a new directory for new blog, ex: blog-to-pdf -i -d any-blog-name
+
 `
 
 const constCusotmCSS = `
@@ -172,14 +171,14 @@ const constCusotmCSS = `
 
 .general-article { width: 100% !important; page-break-after: always; }
 .the-page-break-class { page-break-after: always; }
-.bibi-credit {line-height: 2rem;color:#222222;font-family:'Baloo Da 2',sans-serif;font-weight:200;height:100vh;margin:0}
-.bibi-credit .full-height{height:100vh}
-.bibi-credit .flex-center{align-items:center;display:flex;justify-content:center}
-.bibi-credit .position-ref{position:relative}
-.bibi-credit .top-right{position:absolute;right:10px;top:18px}
-.bibi-credit .content{text-align:center}
-.bibi-credit .title{font-size: 17px}
-.bibi-credit a{color:#33af7f;font-size: 15px;font-weight:600;letter-spacing:.1rem;text-decoration:none;}
+.the-credit {line-height: 2rem;color:#222222;font-family:'Baloo Da 2',sans-serif;font-weight:200;height:100vh;margin:0}
+.the-credit .full-height{height:100vh}
+.the-credit .flex-center{align-items:center;display:flex;justify-content:center}
+.the-credit .position-ref{position:relative}
+.the-credit .top-right{position:absolute;right:10px;top:18px}
+.the-credit .content{text-align:center}
+.the-credit .title{font-size: 17px}
+.the-credit a{color:#33af7f;font-size: 15px;font-weight:600;letter-spacing:.1rem;text-decoration:none;}
 
 .text-center { text-align: center !important; }
 
@@ -256,7 +255,7 @@ const htmlTemplate = `
 `
 
 const frontAndBackPage = `
-<article class="bibi-credit flex-center position-ref full-height the-page-break-class">
+<article class="the-credit flex-center position-ref full-height the-page-break-class">
 	<div class="content">
 		<div class="title m-b-md">
 			<h2>title_placeholder</h2>

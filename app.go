@@ -9,7 +9,7 @@ import (
 originalHTMLDir = ./original-html
 combinedHTMLDir = ./combined-html
 */
-const version = "2"
+const version = "2.1"
 
 var originalHTMLDir string
 var combinedHTMLDir string
@@ -17,17 +17,17 @@ var combinedHTMLDir string
 var cfgFile *ini.File
 var errIni error
 
-var iniFilePath string
+var cfgFilePath string
 var cfg iniStruct
 
 // var SiteURL string
 
 func main() {
-	hel.P("cli version: " + version)
-	handleBootFlags()
+	hel.P("blog-to-pdf, cli version: " + version)
+	flags()
 	postSuccessBoot()
 	build()
-	hel.P("cli version: " + version)
+	hel.P("blog-to-pdf, cli version: " + version)
 }
 
 func postSuccessBoot() {
@@ -40,7 +40,7 @@ func postSuccessBoot() {
 }
 
 func loadCfg() {
-	cfgFile, errIni = ini.Load(iniFilePath)
+	cfgFile, errIni = ini.Load(cfgFilePath)
 	hel.PErr("loading ini file", errIni)
 }
 

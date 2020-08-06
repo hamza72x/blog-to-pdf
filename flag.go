@@ -8,55 +8,58 @@ import (
 	hel "github.com/thejini3/go-helper"
 )
 
-func handleBootFlags() {
+func flags() {
+
+	init := flag.Bool("i", false, "initialize a new directory for new blog, ex: blog-to-pdf -i -d any-blog-name")
+	dir := flag.String("d", "", "(required, if -i is passed) initialization directory name, ex: blog-to-pdf -i -d any-blog-name")
+	echoConfig := flag.Bool("ec", false, "print sample config data to console. ex: blog-to-pdf -ec")
+	generateIni := flag.Bool("gc", false, "create sample config file. ex: blog-to-pdf -gc")
+
+	flag.StringVar(&cfgFilePath, "c", "", "(required) run the config file, ex: blog-to-pdf -c config.ini")
 
 	flag.Parse()
 
-	if len(flag.Args()) == 0 {
-		runFailed()
-	}
+	if *init {
 
-	/// - init
-	if flag.Arg(0) == "init" {
-
-		dir := flag.Arg(1)
-
-		if len(dir) == 0 {
-			runFailed()
-		} else if hel.PathExists(dir) {
-			hel.OSExit("Dir `" + dir + "` already exists, use different name!")
+		if *dir == "" {
+			hel.Pl("Err: -d is required during -i")
+			flag.PrintDefaults()
+			os.Exit(1)
 		}
 
-		handleFlagInit(dir)
-		os.Exit(0)
-	} else if flag.Arg(0) == "echo-config.ini" {
+		if hel.PathExists(*dir) {
+			panic("Dir `" + *dir + "` already exists, use different name!")
+		}
 
+		handleFlagInit(*dir)
+		os.Exit(0)
+	}
+
+	if *echoConfig {
 		fmt.Println(constSampleINI)
-
 		os.Exit(0)
 	}
 
-	/// - generate-ini
-	if flag.Arg(0) == "generate-ini" {
-		createFile(hel.GetNonCreatedFileName("config", ".ini", 1), constSampleINI)
+	if *generateIni {
+		fname := hel.GetNonCreatedFileName("config", ".ini", 1)
+		if err := hel.StrToFile(fname, constSampleINI); err == nil {
+			hel.Pl("Generated: " + fname)
+		}
 		os.Exit(0)
 	}
 
-	iniFilePath = flag.Arg(0)
+	if cfgFilePath == "" {
+		flag.PrintDefaults()
+		os.Exit(1)
+	}
 
-	if !hel.FileExists(iniFilePath) {
-		hel.PS("The ini file `" + iniFilePath + "` doesn't exist!")
+	if !hel.FileExists(cfgFilePath) {
+		hel.PS("The ini file `" + cfgFilePath + "` doesn't exist!")
 		hel.PM("To auto-generate ini file, run  -")
-		hel.PE("$ blog-to-pdf init")
-		os.Exit(0)
+		hel.PE("$ blog-to-pdf -i -d any-blog-name")
+		os.Exit(1)
 	}
 
-}
-
-func runFailed() {
-	hel.PS("\n+\tWrong instruction given!")
-	hel.PE(constHelpStr)
-	hel.OSExit("")
 }
 
 func handleFlagInit(dir string) {
@@ -75,33 +78,14 @@ func handleFlagInit(dir string) {
 	}
 
 	for filename, fileData := range filesAndData {
-		createFile(filename, fileData)
+		hel.StrToFile(filename, fileData)
 	}
 
 	var instruction = `
 +		Now -
 +		$ cd ` + dir + `
 +		Edit config.ini according to your needs, then -
-+		$ blog-to-pdf config.ini
++		$ blog-to-pdf -c config.ini
 `
 	hel.P(instruction)
-}
-
-func createFile(filename string, fileData string) {
-
-	file, err := os.Create(filename)
-
-	if err != nil {
-		hel.OSExit("Error creating `" + filename + "` file: " + err.Error())
-	}
-
-	if err != nil {
-		hel.OSExit("Error creating `" + filename + "` file: " + err.Error())
-	}
-
-	hel.P("Created string replace file: " + filename)
-
-	file.WriteString(fileData)
-
-	file.Close()
 }
