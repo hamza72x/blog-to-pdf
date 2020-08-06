@@ -65,8 +65,8 @@ const lineBreakHTML3 = `
 <br/>
 `
 
-func getFileJSONIfExists(filename string) []theReplace {
-	var v []theReplace
+func getFileJSONIfExists(filename string) []xReplace {
+	var v []xReplace
 
 	if hel.FileExists(filename) {
 		err := json.Unmarshal(hel.GetFileBytes(filename), &v)

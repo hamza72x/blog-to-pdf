@@ -2,7 +2,7 @@ package main
 
 import hel "github.com/thejini3/go-helper"
 
-type iniStruct struct {
+type xCFG struct {
 	Domain                         string   `ini:"domain"`
 	SiteMapsURL                    []string `ini:"sitemaps_url"`
 	GetSiteMapByWpJSON             bool     `ini:"get_sitemap_by_wp_json"`
@@ -33,32 +33,32 @@ type iniStruct struct {
 	PdfMarginBottom                int      `ini:"pdf_margin_bottom"`
 }
 
-type rangeStruct struct {
+type xRange struct {
 	Min int // 1 based, i.e not 0 based -_-
 	Max int
 }
 
-type htmlFileStruct struct {
+type xHTMLFile struct {
 	LocalPath string
 	RemoteURL string
 }
 
-type singleOutFileStruct struct {
-	HTMLFiles []htmlFileStruct
-	TheRange  rangeStruct
+type xPdfile struct {
+	HTMLFiles []xHTMLFile
+	TheRange  xRange
 	FileNo    int
 }
 
-func (hf *htmlFileStruct) HtmlBytes() []byte {
+func (hf *xHTMLFile) fileBytes() []byte {
 	return []byte(hel.GetFileBytes(hf.LocalPath))
 }
 
-type theReplace struct {
+type xReplace struct {
 	Serial int               `json:"serial"`
 	Data   map[string]string `json:"data"`
 }
 
-func (t *theReplace) FindStr() string {
+func (t *xReplace) FindStr() string {
 	var str = ""
 	for i := range t.Data {
 		str = i
@@ -66,48 +66,10 @@ func (t *theReplace) FindStr() string {
 	return str
 }
 
-func (t *theReplace) ReplaceStr() string {
+func (t *xReplace) ReplaceStr() string {
 	var str = ""
 	for i := range t.Data {
 		str = t.Data[i]
 	}
 	return str
 }
-
-//
-//func (sof *singleOutFileStruct) combinedHtmlStr() string {
-//
-//	firstHtmlFile := sof.OutArticles[0].ContentHtml
-//
-//	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(firstHtmlFile.Bytes()))
-//	hel.PErr("goquery.NewDocumentFromReader", err)
-//
-//	head := doc.Find("head")
-//
-//	head.AppendHtml("<style>" + ConstDefaultCss + "</style>")
-//
-//	if hel.FileExists(cfg.CustomCSSFile) {
-//		head.AppendHtml(`<style>` + hel.GetFileStr(cfg.CustomCSSFile) + `</style>`)
-//	}
-//
-//	// combined htmls - ArticlePerPDF
-//	for i := 1; i < len(combinedHtmlFiles); i++ {
-//		articleParent := doc.Find(cfg.ArticleParentElement)
-//		articleParent.AppendHtml(`<br/><hr/><hr/><br/>`)
-//		articleParent.AppendHtml(getContentHtml(combinedHtmlFiles[i]))
-//	}
-//
-//	// set [i] in title
-//	doc.Find(cfg.ArticleTitleClass).Each(func(i int, s *goquery.Selection) {
-//		s.PrependHtml("[" + strconv.Itoa(theRange.Min+i) + "] ")
-//		s.AddClass("text-center")
-//		if cfg.AppendURLInTitle {
-//			s.AppendHtml(
-//				fmt.Sprintf("<br/><a class=\"article-origin-link\" style=\"font-size: 12px;\" href=\"%s\">%s</a>", combinedHtmlFiles[i].RemoteURL, combinedHtmlFiles[i].RemoteURL),
-//			)
-//		}
-//	})
-//
-//	docHtmlStr, err := doc.Selection.Html()
-//	hel.PErr("doc.Selection.Html", err)
-//}

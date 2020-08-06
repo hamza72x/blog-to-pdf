@@ -18,7 +18,7 @@ var cfgFile *ini.File
 var errIni error
 
 var cfgFilePath string
-var cfg iniStruct
+var cfg xCFG
 
 // var SiteURL string
 

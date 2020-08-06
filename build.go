@@ -20,38 +20,37 @@ import (
 func build() {
 
 	allHTMLFiles := getHTMLFiles()
-	singleOutFiles := getOutFiles(allHTMLFiles)
 
 	removeContents(combinedHTMLDir)
 
-	for _, sof := range singleOutFiles {
-		buildCombinedHTMLAndGeneratePDF(sof)
+	for _, pdfile := range getPdfiles(allHTMLFiles) {
+		buildCombinedHTMLAndGeneratePDF(pdfile)
 	}
 
 }
-func getOutFiles(allHTMLFiles []htmlFileStruct) (outFiles []singleOutFileStruct) {
+func getPdfiles(allHTMLFiles []xHTMLFile) (outFiles []xPdfile) {
 
 	for i, theRange := range getRanges(len(allHTMLFiles)) {
 
-		var htmls []htmlFileStruct
+		var htmls []xHTMLFile
 
 		for i := theRange.Min; i <= theRange.Max; i++ {
 			htmls = append(htmls, allHTMLFiles[i-1])
 		}
 
 		outFiles = append(outFiles,
-			singleOutFileStruct{htmls, theRange, i},
+			xPdfile{htmls, theRange, i},
 		)
 	}
 	return
 }
 
-func buildCombinedHTMLAndGeneratePDF(sof singleOutFileStruct) {
+func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 
 	// one pdf/doc will have multiple html file
-	htmls := sof.HTMLFiles
-	theRange := sof.TheRange
-	fileNo := sof.FileNo
+	htmls := pdfile.HTMLFiles
+	theRange := pdfile.TheRange
+	fileNo := pdfile.FileNo
 
 	htmlTemplate, err := goquery.NewDocumentFromReader(bytes.NewReader([]byte(htmlTemplate)))
 	hel.PErr("[1] goquery.NewDocumentFromReader", err)
@@ -180,9 +179,9 @@ func htmlToPDF(htmlFilePath string, pdfFilePath string, i int) {
 	}
 }
 
-func getRanges(totalHTMLCount int) []rangeStruct {
+func getRanges(totalHTMLCount int) []xRange {
 
-	var ranges []rangeStruct
+	var ranges []xRange
 
 	totalPdfCount := int(math.Floor(float64(totalHTMLCount) / float64(cfg.ArticlePerPDF)))
 	lastMax := 0
@@ -198,12 +197,12 @@ func getRanges(totalHTMLCount int) []rangeStruct {
 
 		lastMax = max
 
-		ranges = append(ranges, rangeStruct{Min: min, Max: max})
+		ranges = append(ranges, xRange{Min: min, Max: max})
 
 	}
 
 	if totalHTMLCount > lastMax {
-		ranges = append(ranges, rangeStruct{Min: lastMax + 1, Max: totalHTMLCount})
+		ranges = append(ranges, xRange{Min: lastMax + 1, Max: totalHTMLCount})
 	}
 
 	return ranges

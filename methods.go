@@ -9,9 +9,9 @@ import (
 	hel "github.com/thejini3/go-helper"
 )
 
-func getHTMLFiles() []htmlFileStruct {
+func getHTMLFiles() []xHTMLFile {
 
-	var htmlFiles []htmlFileStruct
+	var htmlFiles []xHTMLFile
 	var urls = getUrls()
 
 	// p("getUrls count: " + strconv.Itoa(len(getUrls())))
@@ -42,7 +42,7 @@ func getHTMLFiles() []htmlFileStruct {
 			osFile.Close()
 		}
 
-		htmlFiles = append(htmlFiles, htmlFileStruct{
+		htmlFiles = append(htmlFiles, xHTMLFile{
 			LocalPath: localHTMLFilePath,
 			RemoteURL: urlStr,
 		})
