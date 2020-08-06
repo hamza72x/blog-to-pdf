@@ -14,11 +14,7 @@ func getHTMLFiles() []xHTMLFile {
 	var htmlFiles []xHTMLFile
 	var urls = getUrls()
 
-	// p("getUrls count: " + strconv.Itoa(len(getUrls())))
-
 	for i, urlStr := range urls {
-
-		// fileNo := strconv.Itoa(i + 1)
 
 		if cfg.LimitUrlsNo > 0 && (i+1) > cfg.LimitUrlsNo {
 			break
@@ -48,8 +44,6 @@ func getHTMLFiles() []xHTMLFile {
 		})
 
 	}
-	// pp("htmlFiles count: " + strconv.Itoa(len(htmlFiles)))
-	//hel.P("Run again, if app quits here!")
 	return htmlFiles
 }
 
@@ -69,21 +63,12 @@ func getUrls() []string {
 	var urlStr = getUrlsFromSiteMap()
 
 	if len(urlStr) == 0 {
-		hel.PS("SiteMap url isn't valid probably!")
-		hel.PM("So, try following wget command go grab all url of the site")
-		hel.PM(`$ wget --spider -r https://` + cfg.Domain + ` 2>&1 | grep '^--' | awk '{ print $3 }' | grep -v '\.\(css\|js\|png\|gif\|jpg\|JPG\)$' > /tmp/urls.txt`)
-		hel.PE("Then copy full content of 'wget.urls.txt' file to urls.txt")
+		panic("SiteMap url isn't valid probably, use $ sitemap-generator (npm package)")
 	}
 
-	f, err := os.Create(cfg.URLFile)
-
-	if err != nil {
-		fmt.Println("Error os.Create: "+err.Error(), cfg.URLFile)
+	if err := hel.StrToFile(cfg.URLFile, urlStr); err != nil {
+		panic("Error writing file to: " + cfg.URLFile)
 	}
-
-	defer f.Close()
-
-	f.WriteString(urlStr)
 
 	urls := hel.StrToArr(urlStr, "\n")
 
