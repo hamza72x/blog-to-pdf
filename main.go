@@ -1,6 +1,9 @@
 package main
 
 import (
+	"path/filepath"
+	"strings"
+
 	hel "github.com/thejini3/go-helper"
 	"gopkg.in/ini.v1"
 )
@@ -17,7 +20,9 @@ var combinedHTMLDir string
 var cfgFile *ini.File
 var errIni error
 
+var cfgDir string
 var cfgFilePath string
+var thread int = 50
 var cfg xCFG
 
 // var SiteURL string
@@ -37,6 +42,10 @@ func loadCfg() {
 	cfgFile, errIni = ini.Load(cfgFilePath)
 	hel.PlP("loading ini file", errIni)
 
+	cfgDir = filepath.Dir(cfgFilePath)
+
+	hel.Pl("cfgDir", cfgDir)
+
 	// parse
 	err := cfgFile.Section("").MapTo(&cfg)
 	hel.PlP("mapping ini file, probably bad data!", err)
@@ -54,12 +63,12 @@ func loadCfg() {
 		cfg.BrowserUserAgent = collonifyDollar(cfg.BrowserUserAgent)
 	}
 
-	if len(cfg.PdfOutputDirPath) == 0 {
-		cfg.PdfOutputDirPath = "./pdf"
+	if len(cfg.PdfOutputDirPath) == 0 || strings.HasPrefix(cfg.PdfOutputDirPath, "./") {
+		cfg.PdfOutputDirPath = cfgDir + "/pdf"
 	}
 
-	if len(cfg.URLFile) == 0 {
-		cfg.URLFile = "./urls.txt"
+	if len(cfg.URLFile) == 0 || strings.HasPrefix(cfg.URLFile, "./") {
+		cfg.URLFile = cfgDir + "/urls.txt"
 	}
 
 	if len(cfg.PdfFileName) == 0 {

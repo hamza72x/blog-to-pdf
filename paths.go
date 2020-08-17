@@ -14,8 +14,8 @@ combinedHTMLDir = ./combined-html
 
 func bootDirPaths() {
 
-	originalHTMLDir = "./original-html"
-	combinedHTMLDir = "./combined-html"
+	originalHTMLDir = cfgDir + "/original-html"
+	combinedHTMLDir = cfgDir + "/combined-html"
 
 	createDirsIfNotExists(
 		[]string{originalHTMLDir, combinedHTMLDir, cfg.PdfOutputDirPath},

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"sync"
 
 	"github.com/thejini3/blog-to-pdf/sitemap"
 	hel "github.com/thejini3/go-helper"
@@ -14,28 +15,30 @@ func getHTMLFiles() []xHTMLFile {
 	var htmlFiles []xHTMLFile
 	var urls = getUrls()
 
+	var wg sync.WaitGroup
+	var c = make(chan int, thread)
+
 	for i, urlStr := range urls {
 
 		if cfg.LimitUrlsNo > 0 && (i+1) > cfg.LimitUrlsNo {
 			break
 		}
 
+		wg.Add(1)
+
 		localHTMLFilePath := originalHTMLDir + "/" + hel.StrFilterToAlphabetsAndNumbersMust(urlStr) + ".html"
 
 		if cfg.ForceFetchHTML || !hel.FileExists(localHTMLFilePath) {
 
-			osFile, err := os.Create(localHTMLFilePath)
+			go func(localHTMLFilePath, urlStr string, i int) {
+				c <- i
+				download(localHTMLFilePath, urlStr, i)
+				wg.Done()
+				<-c
+			}(localHTMLFilePath, urlStr, i)
 
-			if err != nil {
-				panic(err)
-			}
-
-			urlContent := hel.URLContentMust(urlStr, cfg.BrowserUserAgent)
-			osFile.WriteString(string(urlContent))
-
-			hel.Pl(fmt.Sprintf("%v: Downloaded Origin Html: %v", i+1, localHTMLFilePath))
-
-			osFile.Close()
+		} else {
+			wg.Done()
 		}
 
 		htmlFiles = append(htmlFiles, xHTMLFile{
@@ -44,9 +47,25 @@ func getHTMLFiles() []xHTMLFile {
 		})
 
 	}
+
+	wg.Wait()
+
 	return htmlFiles
 }
+func download(localHTMLFilePath, urlStr string, i int) {
+	osFile, err := os.Create(localHTMLFilePath)
 
+	if err != nil {
+		panic(err)
+	}
+
+	urlContent := hel.URLContentMust(urlStr, cfg.BrowserUserAgent)
+	osFile.WriteString(string(urlContent))
+
+	hel.Pl(fmt.Sprintf("%v: Downloaded Origin Html: %v", i+1, localHTMLFilePath))
+
+	osFile.Close()
+}
 func getUrls() []string {
 
 	if !cfg.ForceUrlsFetch && hel.FileExists(cfg.URLFile) == true {

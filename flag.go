@@ -16,6 +16,7 @@ func flags() {
 	generateIni := flag.Bool("gc", false, "create sample config file. ex: blog-to-pdf -gc")
 
 	flag.StringVar(&cfgFilePath, "c", "", "(required) run the config file, ex: blog-to-pdf -c config.ini")
+	flag.IntVar(&thread, "t", 50, "(concurrent connections (default 50)")
 
 	flag.Parse()
 

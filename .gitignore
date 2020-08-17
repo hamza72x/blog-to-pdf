@@ -25,7 +25,7 @@ blog-to-pdf-output/
 /vendor
 storage/
 /storage
-
+/build
 /.idea
 .idea
 /.vagrant

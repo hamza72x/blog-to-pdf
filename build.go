@@ -54,7 +54,7 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 	serial := pdfile.Serial
 
 	htmlTemplate, err := goquery.NewDocumentFromReader(bytes.NewReader([]byte(htmlTemplate)))
-	hel.Pl("[1] goquery.NewDocumentFromReader", err)
+	hel.PlP("[1] goquery.NewDocumentFromReader", err)
 
 	htmlContainer := htmlTemplate.Find("div.the-tool-container")
 	htmlHead := htmlTemplate.Find("head")
