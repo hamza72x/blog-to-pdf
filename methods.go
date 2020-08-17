@@ -49,6 +49,7 @@ func getHTMLFiles() []xHTMLFile {
 	}
 
 	wg.Wait()
+	close(c)
 
 	return htmlFiles
 }

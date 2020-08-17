@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
@@ -23,10 +24,21 @@ func build() {
 
 	removeContents(combinedHTMLDir)
 
-	for _, pdfile := range getPdfiles(allHTMLFiles) {
-		buildCombinedHTMLAndGeneratePDF(pdfile)
+	var wg sync.WaitGroup
+	var c = make(chan int, thread)
+
+	for i, pdfile := range getPdfiles(allHTMLFiles) {
+		wg.Add(1)
+		go func(pdfile xPdfile, i int) {
+			c <- i
+			buildCombinedHTMLAndGeneratePDF(pdfile)
+			wg.Done()
+			<-c
+		}(pdfile, i)
 	}
 
+	wg.Wait()
+	close(c)
 }
 func getPdfiles(allHTMLFiles []xHTMLFile) []xPdfile {
 	var pdfiles []xPdfile
