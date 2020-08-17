@@ -54,13 +54,13 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 	serial := pdfile.Serial
 
 	htmlTemplate, err := goquery.NewDocumentFromReader(bytes.NewReader([]byte(htmlTemplate)))
-	hel.PErr("[1] goquery.NewDocumentFromReader", err)
+	hel.Pl("[1] goquery.NewDocumentFromReader", err)
 
 	htmlContainer := htmlTemplate.Find("div.the-tool-container")
 	htmlHead := htmlTemplate.Find("head")
 
 	if hel.FileExists(cfg.CustomCSSFile) {
-		htmlHead.AppendHtml(`<style>` + hel.GetFileStr(cfg.CustomCSSFile) + `</style>`)
+		htmlHead.AppendHtml(`<style>` + hel.FileStrMust(cfg.CustomCSSFile) + `</style>`)
 	}
 
 	htmlContainer.AppendHtml(strings.ReplaceAll(frontAndBackPage,
@@ -112,7 +112,7 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 	)
 
 	combinedHTMLStr, err := htmlTemplate.Html()
-	hel.PErr("doc.Selection.Html", err)
+	hel.PlP("doc.Selection.Html", err)
 
 	combinedHTMLStr = gohtml.Format(combinedHTMLStr)
 
@@ -123,9 +123,9 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 	)
 
 	osFile, err := os.Create(combinedHTMLFilePath)
-	hel.PErr("os.Create(htmlFilePath)", err)
+	hel.PlP("os.Create(htmlFilePath)", err)
 
-	hel.PS(fmt.Sprintf("%d: Generated Combined HTML File: "+combinedHTMLFilePath, serial))
+	hel.Pl(fmt.Sprintf("%d: Generated Combined HTML File: "+combinedHTMLFilePath, serial))
 
 	osFile.WriteString(combinedHTMLStr)
 
@@ -136,25 +136,25 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 		var pdfFilePath = fmt.Sprintf(cfg.PdfOutputDirPath+"/%d-%d_"+cfg.PdfFileName+".pdf", theRange.Start, theRange.End)
 
 		if cfg.SkipPDFCreationIfExistsAlready && hel.FileExists(pdfFilePath) {
-			hel.PE(fmt.Sprintf("%d: [SkipPDFCreationIfExistsAlready] Already exists!", serial))
+			hel.Pl(fmt.Sprintf("%d: [SkipPDFCreationIfExistsAlready] Already exists!", serial))
 		} else {
 			htmlToPDF(combinedHTMLFilePath, pdfFilePath, serial)
 		}
 
 	} else {
-		hel.PE("Skipping pdf generation as it's disabled in `" + cfgFilePath + "`")
+		hel.Pl("Skipping pdf generation as it's disabled in `" + cfgFilePath + "`")
 	}
 }
 
 func htmlToPDF(htmlFilePath string, pdfFilePath string, serial int) {
 
-	hel.PM(fmt.Sprintf("%d: Creating PDF File!", serial))
+	hel.Pl(fmt.Sprintf("%d: Creating PDF File!", serial))
 
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
-	hel.ErrOSExit("wkhtmltopdf.NewPDFGenerator", err)
+	hel.PlP("wkhtmltopdf.NewPDFGenerator", err)
 
 	htmlfile, err := ioutil.ReadFile(htmlFilePath)
-	hel.ErrOSExit("ioutil.ReadFile(htmlFilePath)", err)
+	hel.PlP("ioutil.ReadFile(htmlFilePath)", err)
 
 	pdfg.PageSize.Set(cfg.PdfPageSize)
 	pdfg.MarginLeft.Set(uint(cfg.PdfMarginTop))
@@ -168,12 +168,12 @@ func htmlToPDF(htmlFilePath string, pdfFilePath string, serial int) {
 	// pdfg.AddPage(wkhtmltopdf.NewPageReader(bytes.NewBufferString(creditHtml)))
 
 	err = pdfg.Create()
-	hel.ErrOSExit("pdfg.Create", err)
+	hel.PlP("pdfg.Create", err)
 
 	err = pdfg.WriteFile(pdfFilePath)
-	hel.ErrOSExit("pdfg.WriteFile", err)
+	hel.PlP("pdfg.WriteFile", err)
 
-	hel.PE(fmt.Sprintf("%d: Generated PDF size %vkB: %v", serial, len(pdfg.Bytes())/1024, pdfFilePath))
+	hel.Pl(fmt.Sprintf("%d: Generated PDF size %vkB: %v", serial, len(pdfg.Bytes())/1024, pdfFilePath))
 
 	if pdfg.Buffer().Len() != len(pdfg.Bytes()) {
 		fmt.Println("Buffersize not equal: " + pdfFilePath)

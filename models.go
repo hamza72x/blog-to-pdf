@@ -51,7 +51,7 @@ type xPdfile struct {
 }
 
 func (hf *xHTMLFile) fileBytes() []byte {
-	return []byte(hel.GetFileBytes(hf.LocalPath))
+	return []byte(hel.FileBytesMust(hf.LocalPath))
 }
 
 type xReplace struct {

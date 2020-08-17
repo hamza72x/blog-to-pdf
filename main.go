@@ -9,7 +9,7 @@ import (
 originalHTMLDir = ./original-html
 combinedHTMLDir = ./combined-html
 */
-const version = "2.1"
+const version = "2.2"
 
 var originalHTMLDir string
 var combinedHTMLDir string
@@ -23,34 +23,25 @@ var cfg xCFG
 // var SiteURL string
 
 func main() {
-	hel.P("blog-to-pdf, cli version: " + version)
+	hel.Pl("blog-to-pdf, cli version: " + version)
 	flags()
-	postSuccessBoot()
-	build()
-	hel.P("blog-to-pdf, cli version: " + version)
-}
-
-func postSuccessBoot() {
 	loadCfg()
-	parseCfgFile()
-	modifyPostCfgInit()
-	printLoadedCfg()
-
-	bootPaths()
+	bootDirPaths()
+	build()
+	hel.Pl("blog-to-pdf, cli version: " + version)
 }
 
 func loadCfg() {
+
+	// load file
 	cfgFile, errIni = ini.Load(cfgFilePath)
-	hel.PErr("loading ini file", errIni)
-}
+	hel.PlP("loading ini file", errIni)
 
-func parseCfgFile() {
+	// parse
 	err := cfgFile.Section("").MapTo(&cfg)
-	hel.PErr("mapping ini file, probably bad data!", err)
-}
+	hel.PlP("mapping ini file, probably bad data!", err)
 
-func modifyPostCfgInit() {
-
+	// post changes / fixes
 	cfg.ArticleTitleClass = hashifyDollar(cfg.ArticleTitleClass)
 	cfg.ArticleParentElement = hashifyDollar(cfg.ArticleParentElement)
 	cfg.ElementsToRemove = hashifyDollars(cfg.ElementsToRemove)
@@ -74,10 +65,9 @@ func modifyPostCfgInit() {
 	if len(cfg.PdfFileName) == 0 {
 		cfg.PdfFileName = cfg.Domain
 	}
-}
 
-func printLoadedCfg() {
-	hel.PS("[CONFIG STARTS]")
+	// print loaded cfgs
+	hel.Pl("[CONFIG STARTS]")
 	hel.PrettyPrint(&cfg)
-	hel.PE("[CONFIG ENDS]")
+	hel.Pl("[CONFIG ENDS]")
 }

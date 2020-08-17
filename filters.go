@@ -69,8 +69,10 @@ func getFileJSONIfExists(filename string) []xReplace {
 	var v []xReplace
 
 	if hel.FileExists(filename) {
-		err := json.Unmarshal(hel.GetFileBytes(filename), &v)
-		hel.PErr("parsing ("+filename+")", err)
+		err := json.Unmarshal(hel.FileBytesMust(filename), &v)
+		if err != nil {
+			panic("parsing (" + filename + ") - " + err.Error())
+		}
 	}
 	sort.Slice(v, func(i, j int) bool {
 		return v[i].Serial < v[j].Serial

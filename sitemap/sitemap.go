@@ -1,15 +1,16 @@
 package sitemap
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"time"
-	"encoding/json"
-	"github.com/thejini3/go-helper"
-	"strconv"
 	"regexp"
+	"strconv"
+	"time"
+
+	hel "github.com/thejini3/go-helper"
 )
 
 // Index is a structure of <sitemapindex>
@@ -38,6 +39,7 @@ type URL struct {
 	Priority   float32 `xml:"priority"`
 }
 
+// GetTime get time from url.LastMod
 func (url URL) GetTime() time.Time {
 	t, err := time.Parse(time.RFC3339, url.LastMod)
 	if err != nil {
@@ -62,9 +64,10 @@ var fetch = func(URL string, options interface{}) ([]byte, error) {
 // Time interval to be used in Index.get
 var interval = time.Second
 
+// GetByWPJSON make urls from wp-json api
 // WpJsonUrl: https://www.muslimmedia.info/wp-json/wp/v2/posts?per_page=50
 // WpJsonUrl: https://www.muslimmedia.info/wp-json/wp/v2/posts?per_page=50&post_type=post
-func GetByWPJSON(WpJsonUrl string, userAgent string) Sitemap {
+func GetByWPJSON(wpJSONURL string, userAgent string) Sitemap {
 	var siteMap = Sitemap{}
 
 	type WpPost struct {
@@ -76,11 +79,11 @@ func GetByWPJSON(WpJsonUrl string, userAgent string) Sitemap {
 	timeRegex := regexp.MustCompile(`\d+-\d+-\d+`)
 	for {
 		var posts []WpPost
-		u := WpJsonUrl + "&page=" + strconv.Itoa(page)
+		u := wpJSONURL + "&page=" + strconv.Itoa(page)
 
 		hel.Pl("Getting urls from =>", u)
 
-		if err := json.Unmarshal(hel.GetURLContent(u, userAgent), &posts); err != nil {
+		if err := json.Unmarshal(hel.URLContentMust(u, userAgent), &posts); err != nil {
 			hel.Pl("Error getting up json", u)
 			break
 		}
@@ -104,7 +107,7 @@ func GetByWPJSON(WpJsonUrl string, userAgent string) Sitemap {
 				LastMod: t.Format(time.RFC3339),
 			})
 		}
-		page += 1
+		page++
 	}
 
 	return siteMap

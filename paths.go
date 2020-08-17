@@ -12,7 +12,7 @@ originalHTMLDir = ./original-html
 combinedHTMLDir = ./combined-html
 */
 
-func bootPaths() {
+func bootDirPaths() {
 
 	originalHTMLDir = "./original-html"
 	combinedHTMLDir = "./combined-html"
@@ -26,7 +26,7 @@ func createDirsIfNotExists(dirs []string) {
 	for _, path := range dirs {
 		if !hel.PathExists(path) {
 			err := os.MkdirAll(path, os.ModePerm)
-			hel.PErr("creating directory: ", err)
+			hel.PlP("creating directory: ", err)
 		}
 	}
 }

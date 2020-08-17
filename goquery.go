@@ -21,7 +21,7 @@ func getContentHTML(htmlFile xHTMLFile) string {
 
 	var content string
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(htmlFile.fileBytes()))
-	hel.PErr("Error in getting content [NewDocumentFromReader]", err)
+	hel.PlP("Error in getting content [NewDocumentFromReader]", err)
 
 	var articleParent = doc.Find(cfg.ArticleParentElement)
 	// articleParent.Children().First().SetAttr("style", "page-break-before: always;")
@@ -50,9 +50,10 @@ func getTitleTxt(htmlFile xHTMLFile) string {
 func getTitleHTML(htmlFile xHTMLFile) string {
 
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(htmlFile.fileBytes()))
-	hel.PErr("Error in getting title [NewDocumentFromReader]", err)
+	hel.PlP("Error in getting title [NewDocumentFromReader]", err)
 
 	htmlStr, err := doc.Find(cfg.ArticleTitleClass).Html()
+	hel.PlP("Error in getting doc.Find(cfg.ArticleTitleClass).Html()", err)
 
 	return htmlStr
 }

@@ -20,7 +20,7 @@ func getHTMLFiles() []xHTMLFile {
 			break
 		}
 
-		localHTMLFilePath := originalHTMLDir + "/" + hel.AZ_AND_NUMBER_ONLY(urlStr) + ".html"
+		localHTMLFilePath := originalHTMLDir + "/" + hel.StrFilterToAlphabetsAndNumbersMust(urlStr) + ".html"
 
 		if cfg.ForceFetchHTML || !hel.FileExists(localHTMLFilePath) {
 
@@ -30,10 +30,10 @@ func getHTMLFiles() []xHTMLFile {
 				panic(err)
 			}
 
-			urlContent := hel.GetURLContent(urlStr, cfg.BrowserUserAgent)
+			urlContent := hel.URLContentMust(urlStr, cfg.BrowserUserAgent)
 			osFile.WriteString(string(urlContent))
 
-			hel.P(fmt.Sprintf("%v: Downloaded Origin Html: %v", i+1, localHTMLFilePath))
+			hel.Pl(fmt.Sprintf("%v: Downloaded Origin Html: %v", i+1, localHTMLFilePath))
 
 			osFile.Close()
 		}
@@ -51,10 +51,10 @@ func getUrls() []string {
 
 	if !cfg.ForceUrlsFetch && hel.FileExists(cfg.URLFile) == true {
 
-		urls := hel.StrToArr(string(hel.GetFileBytes(cfg.URLFile)), "\n")
+		urls := hel.StrToArr(string(hel.FileBytesMust(cfg.URLFile)), "\n")
 
 		if cfg.LimitUrlsNo > 0 {
-			return hel.LimitStrArr(urls, cfg.LimitUrlsNo)
+			return hel.StrArrLimit(urls, cfg.LimitUrlsNo)
 		}
 
 		return urls
@@ -73,7 +73,7 @@ func getUrls() []string {
 	urls := hel.StrToArr(urlStr, "\n")
 
 	if cfg.LimitUrlsNo > 0 {
-		return hel.LimitStrArr(urls, cfg.LimitUrlsNo)
+		return hel.StrArrLimit(urls, cfg.LimitUrlsNo)
 	}
 
 	return urls

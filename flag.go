@@ -41,7 +41,7 @@ func flags() {
 	}
 
 	if *generateIni {
-		fname := hel.GetNonCreatedFileName("config", ".ini", 1)
+		fname := hel.NonCreatedFileName("config", ".ini", 1)
 		if err := hel.StrToFile(fname, constSampleINI); err == nil {
 			hel.Pl("Generated: " + fname)
 		}
@@ -54,9 +54,9 @@ func flags() {
 	}
 
 	if !hel.FileExists(cfgFilePath) {
-		hel.PS("The ini file `" + cfgFilePath + "` doesn't exist!")
-		hel.PM("To auto-generate ini file, run  -")
-		hel.PE("$ blog-to-pdf -i -d any-blog-name")
+		hel.Pl("The ini file `" + cfgFilePath + "` doesn't exist!")
+		hel.Pl("To auto-generate ini file, run  -")
+		hel.Pl("$ blog-to-pdf -i -d any-blog-name")
 		os.Exit(1)
 	}
 
@@ -64,11 +64,11 @@ func flags() {
 
 func handleFlagInit(dir string) {
 
-	dir = hel.AZ_AND_NUMBER_ONLY(dir)
+	dir = hel.StrFilterToAlphabetsAndNumbersMust(dir)
 
 	createDirsIfNotExists([]string{dir})
 
-	hel.P("Created directory: " + dir)
+	hel.Pl("Created directory: " + dir)
 
 	var filesAndData = map[string]string{
 		dir + "/" + "config.ini":            constSampleINI,
@@ -87,5 +87,5 @@ func handleFlagInit(dir string) {
 +		Edit config.ini according to your needs, then -
 +		$ blog-to-pdf -c config.ini
 `
-	hel.P(instruction)
+	hel.Pl(instruction)
 }
