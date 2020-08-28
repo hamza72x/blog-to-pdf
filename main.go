@@ -67,8 +67,10 @@ func loadCfg() {
 		cfg.PdfOutputDirPath = cfgDir + "/pdf"
 	}
 
-	if len(cfg.URLFile) == 0 || strings.HasPrefix(cfg.URLFile, "./") {
+	if len(cfg.URLFile) == 0 {
 		cfg.URLFile = cfgDir + "/urls.txt"
+	} else {
+		cfg.URLFile = cfgDir + "/" + strings.ReplaceAll(cfg.URLFile, "./", "")
 	}
 
 	if len(cfg.PdfFileName) == 0 {

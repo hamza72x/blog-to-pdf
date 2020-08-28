@@ -21,7 +21,6 @@ import (
 func build() {
 
 	allHTMLFiles := getHTMLFiles()
-
 	removeContents(combinedHTMLDir)
 
 	var wg sync.WaitGroup

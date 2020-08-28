@@ -70,8 +70,9 @@ func download(localHTMLFilePath, urlStr string, i int) {
 func getUrls() []string {
 
 	if !cfg.ForceUrlsFetch && hel.FileExists(cfg.URLFile) == true {
-
-		urls := hel.StrToArr(string(hel.FileBytesMust(cfg.URLFile)), "\n")
+		hel.Pl(cfg.URLFile)
+		// urls := hel.StrToArr(string(hel.FileBytesMust(cfg.URLFile)), "\n")
+		urls, _ := hel.FileWordList(cfg.URLFile)
 
 		if cfg.LimitUrlsNo > 0 {
 			return hel.StrArrLimit(urls, cfg.LimitUrlsNo)
