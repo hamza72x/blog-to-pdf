@@ -5,8 +5,8 @@ import (
 	"regexp"
 
 	"github.com/PuerkitoBio/goquery"
+	hel "github.com/hamza02x/go-helper"
 	"github.com/jaytaylor/html2text"
-	hel "github.com/thejini3/go-helper"
 )
 
 // func getContentTxt(file xHTMLFile) string {

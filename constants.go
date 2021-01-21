@@ -67,7 +67,7 @@ url_file = ./urls.txt
 # $ cat urls.txt | sort -u | tee -a sorted.txt
 # $ cat urls.txt | sort -n | tee -a sorted.txt
 
-# for blogpost url, use: github.com/thejini3/sort-blogspot-urls
+# for blogpost url, use: github.com/hamza02x/sort-blogspot-urls
 # urls should start with 'https'
 # https://x.blogspot.com/2014/11/blog-post_2.html
 # https://x.blogspot.com/2014/11/blog-post.html

@@ -6,8 +6,8 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/thejini3/blog-to-pdf/sitemap"
-	hel "github.com/thejini3/go-helper"
+	"github.com/hamza02x/blog-to-pdf/sitemap"
+	hel "github.com/hamza02x/go-helper"
 )
 
 func getHTMLFiles() []xHTMLFile {
@@ -75,7 +75,7 @@ func getUrls() []string {
 		urls, _ := hel.FileWordList(cfg.URLFile)
 
 		if cfg.LimitUrlsNo > 0 {
-			return hel.StrArrLimit(urls, cfg.LimitUrlsNo)
+			return hel.ArrStrLimit(urls, cfg.LimitUrlsNo)
 		}
 
 		return urls
@@ -94,7 +94,7 @@ func getUrls() []string {
 	urls := hel.StrToArr(urlStr, "\n")
 
 	if cfg.LimitUrlsNo > 0 {
-		return hel.StrArrLimit(urls, cfg.LimitUrlsNo)
+		return hel.ArrStrLimit(urls, cfg.LimitUrlsNo)
 	}
 
 	return urls

@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	hel "github.com/thejini3/go-helper"
+	hel "github.com/hamza02x/go-helper"
 	"gopkg.in/ini.v1"
 )
 

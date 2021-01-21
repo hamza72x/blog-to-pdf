@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	hel "github.com/thejini3/go-helper"
+	hel "github.com/hamza02x/go-helper"
 )
 
 func flags() {
