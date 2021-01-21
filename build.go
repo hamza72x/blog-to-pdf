@@ -138,7 +138,7 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 	osFile, err := os.Create(combinedHTMLFilePath)
 	hel.PlP("os.Create(htmlFilePath)", err)
 
-	hel.Pl(fmt.Sprintf("%d: Generated Combined HTML File: "+combinedHTMLFilePath, serial))
+	hel.Pl(fmt.Sprintf("🔪 %d: Generated Combined HTML File: "+combinedHTMLFilePath, serial))
 
 	osFile.WriteString(combinedHTMLStr)
 
@@ -161,7 +161,7 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 
 func htmlToPDF(htmlFilePath string, pdfFilePath string, serial int) {
 
-	hel.Pl(fmt.Sprintf("%d: Creating PDF File!", serial))
+	hel.Pl(fmt.Sprintf("🛠 %d: Creating PDF File!", serial))
 
 	pdfg, err := wkhtmltopdf.NewPDFGenerator()
 	hel.PlP("wkhtmltopdf.NewPDFGenerator", err)
@@ -186,7 +186,7 @@ func htmlToPDF(htmlFilePath string, pdfFilePath string, serial int) {
 	err = pdfg.WriteFile(pdfFilePath)
 	hel.PlP("pdfg.WriteFile", err)
 
-	hel.Pl(fmt.Sprintf("%d: Generated PDF size %vkB: %v", serial, len(pdfg.Bytes())/1024, pdfFilePath))
+	hel.Pl(fmt.Sprintf("✅ %d: Generated PDF size %vkB: %v", serial, len(pdfg.Bytes())/1024, pdfFilePath))
 
 	if pdfg.Buffer().Len() != len(pdfg.Bytes()) {
 		fmt.Println("Buffersize not equal: " + pdfFilePath)
