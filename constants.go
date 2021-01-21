@@ -1,10 +1,10 @@
 package main
 
-const constSampleINI = `domain = your_blog.com
+const constSampleINI = `domain = blog.com
 
 # supports multiple sitemap
 # comma is important
-sitemaps_url = https://your_blog.com/sitemap.xml,
+sitemaps_url = https://blog.com/sitemap.xml,
 
 # in case of wp-json type
 # comma is important
@@ -14,6 +14,23 @@ get_sitemap_by_wp_json = false
 
 # Generate pdf or not, if false then only combined-html files will be created!
 generate_pdf = false
+
+# Force Re-fetch urls from sitemap / by wget
+# comment this if you have used custom sort (sorted.txt maybe?)
+force_urls_fetch = true
+
+url_file = ./urls.txt
+
+# asc or desc, according to sitemap time or date
+# only works during url grab
+
+# better try this -
+# $ cat urls.txt | sort -u | tee -a sorted.txt
+# $ cat urls.txt | sort -n | tee -a sorted.txt
+
+# Default name: <min_range>-<max_range>_your_blog.com.pdf
+# If you set this then: <min_range>-<max_range>_custom.pdf
+pdf_file_name = blog
 
 # This is one of the important value, since we will merge (article_per_pdf) 10 article in a single PDF
 # so, which portion of the HTML will be merged in the main Layout? Ex: 'div#content', 'div.post', 'article'
@@ -25,10 +42,6 @@ article_title_class = h2.entry-title
 
 # for "id", use "$" instead of "#"
 elements_to_remove = footer, aside, .respond
-
-# Default name: <min_range>-<max_range>_your_blog.com.pdf
-# If you set this then: <min_range>-<max_range>_custom.pdf
-# pdf_file_name = custom
 
 article_per_pdf = 25
 
@@ -52,20 +65,8 @@ string_replaces_file = string_replaces.json
 # Force Re-fetch htmls from server
 force_html_fetch = false
 
-# Force Re-fetch urls from sitemap / by wget
-force_urls_fetch = true
-
 # -1 => work with all url
 limit_urls = -1
-
-url_file = ./urls.txt
-
-# asc or desc, according to sitemap time or date
-# only works during url grab
-
-# better try this -
-# $ cat urls.txt | sort -u | tee -a sorted.txt
-# $ cat urls.txt | sort -n | tee -a sorted.txt
 
 # for blogpost url, use: github.com/hamza02x/sort-blogspot-urls
 # urls should start with 'https'
@@ -168,13 +169,13 @@ const constCusotmCSS = `
 */ 
 
 .general-article { width: 100% !important; page-break-after: always; }
-.the-page-break-class { page-break-after: always; }
-.the-credit {line-height: 2rem;color:#222222;font-family:'Noto Sans Bengali',sans-serif;font-weight:200;height:100vh;margin:0}
+.the-page-break-class {page-break-after: always;}
+.the-credit {position: relative;line-height: 2rem;color:#222222;font-family:'Noto Sans Bengali',sans-serif;font-weight:200;height:400px;margin:0}
 .the-credit .full-height{height:100vh}
 .the-credit .flex-center{align-items:center;display:flex;justify-content:center}
 .the-credit .position-ref{position:relative}
 .the-credit .top-right{position:absolute;right:10px;top:18px}
-.the-credit .content{text-align:center}
+.the-credit .content{text-align:center;top: 25%;position: absolute;width: 95%;}
 .the-credit .title{font-size: 17px}
 .the-credit a{color:#33af7f;font-size: 15px;font-weight:600;letter-spacing:.1rem;text-decoration:none;}
 
