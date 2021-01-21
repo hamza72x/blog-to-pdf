@@ -9,7 +9,7 @@
 
 2. Install Go, cofigure $GOPATH & $GOROOT
 
-3. go get -u github.com/thejini3/blog-to-pdf
+3. go get -u github.com/hamza02x/blog-to-pdf
 ```
 
 
@@ -70,7 +70,7 @@ url_file = ./urls.txt
 # better try this -
 # $ cat urls.txt | sort -u | tee -a sorted.txt
 
-# for blogspot url sorting, use: github.com/thejini3/sort-blogspot-urls
+# for blogspot url sorting, use: github.com/hamza02x/sort-blogspot-urls
 # urls should start with 'https'
 # $ sort-url-by-path-date urls.txt
 # Example output format:
