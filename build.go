@@ -21,6 +21,7 @@ import (
 func build() {
 
 	allHTMLFiles := getHTMLFiles()
+
 	removeContents(combinedHTMLDir)
 
 	var wg sync.WaitGroup
@@ -60,6 +61,7 @@ func getPdfiles(allHTMLFiles []xHTMLFile) []xPdfile {
 func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 
 	// one pdf/doc will have multiple html file
+	creditHTML := hel.FileStrMust("credit.html")
 	htmls := pdfile.HTMLFiles
 	theRange := pdfile.TheRange
 	serial := pdfile.Serial
@@ -74,7 +76,7 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 		htmlHead.AppendHtml(`<style>` + hel.FileStrMust(cfg.CustomCSSFile) + `</style>`)
 	}
 
-	htmlContainer.AppendHtml(strings.ReplaceAll(frontAndBackPage,
+	htmlContainer.AppendHtml(strings.ReplaceAll(creditHTML,
 		"title_placeholder",
 		fmt.Sprintf("%d-%d_"+cfg.PdfFileName, theRange.Start, theRange.End)),
 	)
@@ -116,7 +118,7 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 
 	htmlContainer.AppendHtml(
 		strings.ReplaceAll(
-			strings.ReplaceAll(frontAndBackPage, `the-page-break-class`, ""),
+			strings.ReplaceAll(creditHTML, `the-page-break-class`, ""),
 			"title_placeholder",
 			fmt.Sprintf("%d-%d_"+cfg.PdfFileName, theRange.Start, theRange.End),
 		),

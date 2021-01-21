@@ -12,7 +12,51 @@ sitemaps_url = https://your_blog.com/sitemap.xml,
 
 get_sitemap_by_wp_json = false
 
+# Generate pdf or not, if false then only combined-html files will be created!
+generate_pdf = false
+
+# This is one of the important value, since we will merge (article_per_pdf) 10 article in a single PDF
+# so, which portion of the HTML will be merged in the main Layout? Ex: 'div#content', 'div.post', 'article'
+# for "id", use "$" instead of "#"
+article_parent_element = article
+
+# for "id", use "$" instead of "#"
+article_title_class = h2.entry-title
+
+# for "id", use "$" instead of "#"
+elements_to_remove = footer, aside, .respond
+
+# Default name: <min_range>-<max_range>_your_blog.com.pdf
+# If you set this then: <min_range>-<max_range>_custom.pdf
+# pdf_file_name = custom
+
 article_per_pdf = 25
+
+# use $ instead of ;
+browser_user_agent = Mozilla/5.0 (iPhone$ CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1
+
+# There will be in need of some REPLACES, that's why had to use JSON file,
+# Make sure that's valid JSON file
+
+append_article_url_in_title = true
+
+append_auto_article_number_in_title = true
+
+# only $1 will be replaced
+# this is called first
+# then string replaces
+pattern_replaces_file = pattern_replaces.json
+
+string_replaces_file = string_replaces.json
+
+# Force Re-fetch htmls from server
+force_html_fetch = false
+
+# Force Re-fetch urls from sitemap / by wget
+force_urls_fetch = true
+
+# -1 => work with all url
+limit_urls = -1
 
 url_file = ./urls.txt
 
@@ -32,50 +76,6 @@ url_file = ./urls.txt
 # $ sort-url-by-path-date urls.txt
 
 post_order = desc
-
-# Default name: <min_range>-<max_range>_your_blog.com.pdf
-# If you set this then: <min_range>-<max_range>_custom.pdf
-# pdf_file_name = custom
-
-# use $ instead of ;
-browser_user_agent = Mozilla/5.0 (iPhone$ CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1
-
-# This is one of the important value, since we will merge (article_per_pdf) 10 article in a single PDF
-# so, which portion of the HTML will be merged in the main Layout? Ex: 'div#content', 'div.post', 'article'
-# for "id", use "$" instead of "#"
-article_parent_element = .post
-
-# for "id", use "$" instead of "#"
-article_title_class = .post h2.entry-title
-
-append_article_url_in_title = true
-
-append_auto_article_number_in_title = true
-
-# for "id", use "$" instead of "#"
-elements_to_remove = footer, aside, .respond
-
-# There will be in need of some REPLACES, that's why had to use JSON file,
-# Make sure that's valid JSON file
-
-# only $1 will be replaced
-# this is called first
-# then string replaces
-pattern_replaces_file = pattern_replaces.json
-
-string_replaces_file = string_replaces.json
-
-# Force Re-fetch htmls from server
-force_html_fetch = false
-
-# Force Re-fetch urls from sitemap / by wget
-force_urls_fetch = true
-
-# -1 => work with all url
-limit_urls = -1
-
-# Generate pdf or not, if false then only combined-html files will be created!
-generate_pdf = false
 
 # Only generate non generated PDFs
 skip_pdf_creation_if_exists_already = false
@@ -116,10 +116,8 @@ pdf_output_dir_path = ./pdf
 
 pdf_size = A7
 
-
 # "Landscape" or "Portrait"
 pdf_orientation = Portrait
-
 
 # UI
 custom_css_file = custom.css
@@ -171,7 +169,7 @@ const constCusotmCSS = `
 
 .general-article { width: 100% !important; page-break-after: always; }
 .the-page-break-class { page-break-after: always; }
-.the-credit {line-height: 2rem;color:#222222;font-family:'Baloo Da 2',sans-serif;font-weight:200;height:100vh;margin:0}
+.the-credit {line-height: 2rem;color:#222222;font-family:'Noto Sans Bengali',sans-serif;font-weight:200;height:100vh;margin:0}
 .the-credit .full-height{height:100vh}
 .the-credit .flex-center{align-items:center;display:flex;justify-content:center}
 .the-credit .position-ref{position:relative}
@@ -219,10 +217,10 @@ body { background: #FFF !important; }
 .general-article .article-origin-link {	font-size: 12px; text-align: center; }
 .site-url { text-decoration: none; }
 
-img {
-	max-width: 95%;
+img, iframe {
+	max-width: 95% !important;
     object-fit: contain;
-    margin: 0 auto;
+    margin: 0 auto !important;
 	height: auto;
     -webkit-box-shadow: 0 0 3px 0 rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
     -moz-box-shadow: 0 0 3px 0 rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
@@ -254,7 +252,7 @@ const htmlTemplate = `
 </html>
 `
 
-const frontAndBackPage = `
+const constCreditHTML = `
 <article class="the-credit flex-center position-ref full-height the-page-break-class">
 	<div class="content">
 		<div class="title m-b-md">
@@ -266,8 +264,8 @@ const frontAndBackPage = `
 			<h5>
 			<hr>
 			You can also generate yourself, get the tool: <br>
-				<a href="https://github.com/thejini3/blog-to-pdf">
-					https://github.com/thejini3/blog-to-pdf
+				<a href="https://github.com/hamza02x/blog-to-pdf">
+					https://github.com/hamza02x/blog-to-pdf
 				</a>
 			</h5>
 		</div>

@@ -1,4 +1,4 @@
-module github.com/thejini3/blog-to-pdf
+module github.com/hamza02x/blog-to-pdf
 
 go 1.15
 
@@ -8,6 +8,7 @@ require (
 	github.com/jaytaylor/html2text v0.0.0-20200412013138-3577fbdbcff7
 	github.com/olekukonko/tablewriter v0.0.4 // indirect
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
+	github.com/thejini3/blog-to-pdf v0.0.0-20200828111516-ac0c0ce5917c
 	github.com/thejini3/go-helper v1.0.1
 	github.com/yosssi/gohtml v0.0.0-20200519115854-476f5b4b8047
 	gopkg.in/ini.v1 v1.60.2

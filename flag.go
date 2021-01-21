@@ -76,6 +76,7 @@ func handleFlagInit(dir string) {
 		dir + "/" + "string_replaces.json":  constReplacesJSONStr,
 		dir + "/" + "pattern_replaces.json": constReplacesJSONPatternStr,
 		dir + "/" + "custom.css":            constCusotmCSS,
+		dir + "/" + "credit.html":           constCreditHTML,
 	}
 
 	for filename, fileData := range filesAndData {

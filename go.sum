@@ -12,6 +12,8 @@ github.com/olekukonko/tablewriter v0.0.4 h1:vHD/YYe1Wolo78koG299f7V/VAS08c6IpCLn
 github.com/olekukonko/tablewriter v0.0.4/go.mod h1:zq6QwlOf5SlnkVbMSr5EoBv3636FWnp+qbPhuoO21uA=
 github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf h1:pvbZ0lM0XWPBqUKqFU8cmavspvIl9nulOYwdy6IFRRo=
 github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf/go.mod h1:RJID2RhlZKId02nZ62WenDCkgHFerpIOmW0iT7GKmXM=
+github.com/thejini3/blog-to-pdf v0.0.0-20200828111516-ac0c0ce5917c h1:auAdlcbrRNHm23x5nZIfXQb0F4V0lDRtZT/fuOxKUxI=
+github.com/thejini3/blog-to-pdf v0.0.0-20200828111516-ac0c0ce5917c/go.mod h1:vk0YfpiCrGT5lI01Up4iXiCcE9kALeISNi/yivIngZA=
 github.com/thejini3/go-helper v1.0.1 h1:m1oG1mt0fFw0BLHzUt575RxnbstN7z2U+LnaNy9MBU4=
 github.com/thejini3/go-helper v1.0.1/go.mod h1:RpGgLKYiiP2z3rkrwSxWsO7EVXlKTQtDTE0r8qjXrK8=
 github.com/yosssi/gohtml v0.0.0-20200519115854-476f5b4b8047 h1:YWaOkupKL+BRRJSWRq/uhSkWXc1K0QVIYVG36XUBGOc=
