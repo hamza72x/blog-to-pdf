@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	hel "github.com/hamza02x/go-helper"
+	hel "github.com/hamza72x/go-helper"
 )
 
 func additionalFilter(str string) string {

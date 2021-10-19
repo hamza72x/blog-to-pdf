@@ -6,8 +6,8 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/hamza02x/blog-to-pdf/sitemap"
-	hel "github.com/hamza02x/go-helper"
+	"github.com/hamza72x/blog-to-pdf/sitemap"
+	hel "github.com/hamza72x/go-helper"
 )
 
 func getHTMLFiles() []xHTMLFile {

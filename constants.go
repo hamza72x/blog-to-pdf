@@ -68,7 +68,7 @@ force_html_fetch = false
 # -1 => work with all url
 limit_urls = -1
 
-# for blogpost url, use: github.com/hamza02x/sort-blogspot-urls
+# for blogpost url, use: github.com/hamza72x/sort-blogspot-urls
 # urls should start with 'https'
 # https://x.blogspot.com/2014/11/blog-post_2.html
 # https://x.blogspot.com/2014/11/blog-post.html
@@ -267,8 +267,8 @@ const constCreditHTML = `
 			<h5>
 			<hr>
 			You can also generate yourself, get the tool: <br>
-				<a href="https://github.com/hamza02x/blog-to-pdf">
-					https://github.com/hamza02x/blog-to-pdf
+				<a href="https://github.com/hamza72x/blog-to-pdf">
+					https://github.com/hamza72x/blog-to-pdf
 				</a>
 			</h5>
 		</div>

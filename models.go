@@ -1,6 +1,6 @@
 package main
 
-import hel "github.com/hamza02x/go-helper"
+import hel "github.com/hamza72x/go-helper"
 
 type xCFG struct {
 	Domain                         string   `ini:"domain"`

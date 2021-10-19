@@ -5,7 +5,7 @@ import (
 	"regexp"
 
 	"github.com/PuerkitoBio/goquery"
-	hel "github.com/hamza02x/go-helper"
+	hel "github.com/hamza72x/go-helper"
 	"github.com/jaytaylor/html2text"
 )
 

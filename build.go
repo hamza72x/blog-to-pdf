@@ -14,7 +14,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
-	hel "github.com/hamza02x/go-helper"
+	hel "github.com/hamza72x/go-helper"
 	"github.com/yosssi/gohtml"
 )
 

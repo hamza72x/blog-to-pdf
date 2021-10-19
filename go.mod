@@ -1,11 +1,11 @@
-module github.com/hamza02x/blog-to-pdf
+module github.com/hamza72x/blog-to-pdf
 
 go 1.15
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.1
 	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.6.0
-	github.com/hamza02x/go-helper v1.1.2
+	github.com/hamza72x/go-helper v1.2.5
 	github.com/jaytaylor/html2text v0.0.0-20200412013138-3577fbdbcff7
 	github.com/olekukonko/tablewriter v0.0.4 // indirect
 	github.com/smartystreets/goconvey v1.6.4 // indirect
