@@ -3,11 +3,17 @@ package main
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"sort"
+	"strings"
 	"sync"
 
 	"github.com/hamza72x/blog-to-pdf/sitemap"
 	hel "github.com/hamza72x/go-helper"
+)
+
+var (
+	REGEX_SLUGIFY = regexp.MustCompile("[^a-z0-9]+")
 )
 
 func getHTMLFiles() []xHTMLFile {
@@ -26,7 +32,7 @@ func getHTMLFiles() []xHTMLFile {
 
 		wg.Add(1)
 
-		localHTMLFilePath := originalHTMLDir + "/" + hel.StrFilterToAlphabetsAndNumbersMust(urlStr) + ".html"
+		localHTMLFilePath := originalHTMLDir + "/" + slugify(urlStr) + ".html"
 
 		if cfg.ForceFetchHTML || !hel.FileExists(localHTMLFilePath) {
 
@@ -53,20 +59,28 @@ func getHTMLFiles() []xHTMLFile {
 
 	return htmlFiles
 }
+
 func download(localHTMLFilePath, urlStr string, i int) {
 	osFile, err := os.Create(localHTMLFilePath)
+	defer osFile.Close()
 
 	if err != nil {
-		panic(err)
+		hel.Pl("Error creating file: "+localHTMLFilePath, err, "SKIPPING")
+		return
 	}
 
-	urlContent := hel.URLContentMust(urlStr, cfg.BrowserUserAgent)
+	urlContent, err := hel.URLContent(urlStr, cfg.BrowserUserAgent)
+
+	if err != nil {
+		hel.Pl("Error downloading: "+urlStr, err, "SKIPPING")
+		return
+	}
+
 	osFile.WriteString(string(urlContent))
 
 	hel.Pl(fmt.Sprintf("%v: Downloaded Origin Html: %v", i+1, localHTMLFilePath))
-
-	osFile.Close()
 }
+
 func getUrls() []string {
 
 	if !cfg.ForceUrlsFetch && hel.FileExists(cfg.URLFile) == true {
@@ -156,4 +170,8 @@ func getSortedSiteMapURL(urls []sitemap.URL) []sitemap.URL {
 		})
 	}
 	return urls
+}
+
+func slugify(s string) string {
+	return strings.Trim(REGEX_SLUGIFY.ReplaceAllString(strings.ToLower(s), "-"), "-")
 }

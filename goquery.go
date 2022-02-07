@@ -5,55 +5,61 @@ import (
 	"regexp"
 
 	"github.com/PuerkitoBio/goquery"
-	hel "github.com/hamza72x/go-helper"
 	"github.com/jaytaylor/html2text"
 )
 
-// func getContentTxt(file xHTMLFile) string {
-// 	text, err := html2text.FromString(string(file.Bytes()), html2text.Options{PrettyTables: true})
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	return text
-// }
-
-func getContentHTML(htmlFile xHTMLFile) string {
+func getContentHTML(htmlFile xHTMLFile) (string, error) {
 
 	var content string
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(htmlFile.fileBytes()))
-	hel.PlP("Error in getting content [NewDocumentFromReader]", err)
+
+	if err != nil {
+		return "", err
+	}
 
 	var articleParent = doc.Find(cfg.ArticleParentElement)
-	// articleParent.Children().First().SetAttr("style", "page-break-before: always;")
 
 	content, err = articleParent.Html()
 
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	var re = regexp.MustCompile(`\<script .*\>([^@]*)\<\/script\>`)
 
-	return additionalFilter(re.ReplaceAllString(content, ""))
+	return additionalFilter(re.ReplaceAllString(content, "")), nil
 }
 
-func getTitleTxt(htmlFile xHTMLFile) string {
+func getTitleTxt(htmlFile xHTMLFile) (string, error) {
 
-	text, err := html2text.FromString(getTitleHTML(htmlFile), html2text.Options{PrettyTables: true})
+	title, err := getTitleHTML(htmlFile)
+
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
-	return text
+	text, err := html2text.FromString(title, html2text.Options{PrettyTables: true})
+
+	if err != nil {
+		return "", err
+	}
+
+	return text, nil
 }
 
-func getTitleHTML(htmlFile xHTMLFile) string {
+func getTitleHTML(htmlFile xHTMLFile) (string, error) {
 
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(htmlFile.fileBytes()))
-	hel.PlP("Error in getting title [NewDocumentFromReader]", err)
+
+	if err != nil {
+		return "", err
+	}
 
 	htmlStr, err := doc.Find(cfg.ArticleTitleClass).Html()
-	hel.PlP("Error in getting doc.Find(cfg.ArticleTitleClass).Html()", err)
 
-	return htmlStr
+	if err != nil {
+		return "", err
+	}
+
+	return htmlStr, nil
 }

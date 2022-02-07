@@ -43,7 +43,8 @@ type URL struct {
 func (url URL) GetTime() time.Time {
 	t, err := time.Parse(time.RFC3339, url.LastMod)
 	if err != nil {
-		panic(err)
+		hel.Pl("Error parsing time", url.LastMod, url)
+		return time.Now()
 	}
 	return t
 }

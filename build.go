@@ -86,7 +86,18 @@ func buildCombinedHTMLAndGeneratePDF(pdfile xPdfile) {
 
 	for i := 0; i < len(htmls); i++ {
 
-		content := getContentHTML(htmls[i])
+		content, err := getContentHTML(htmls[i])
+
+		if err != nil {
+			hel.Pl("🥺 getContentHTML", err, "SKIPPING")
+			continue
+		}
+
+		if len(content) == 0 {
+			hel.Pl("🥺 Empty content of", htmls[i], "SKIPPING")
+			continue
+		}
+
 		contentArr := strings.Fields(strings.TrimSpace(regexHTMLComment.ReplaceAllString(content, "")))
 		estTime := int(math.Ceil(float64(len(contentArr) / 170)))
 
