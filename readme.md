@@ -177,8 +177,8 @@ pdf_margin_bottom = 3
 ## EXAMPLE
 
 ```
-$ blog-to-pdf init amarspondon
+$ blog-to-pdf -i -d amarspondon
 $ cd amarspondon
-$ blog-to-pdf config.ini
+$ blog-to-pdf -c config.ini
 ```
 
