@@ -47,7 +47,7 @@ To generate pdf after modifying your configs, use `generate_pdf = true`
 
 It's disabled by default, since every blog needs some modification first
 
-```
+```ini
 domain = your_blog.com
 
 # supports multiple sitemap
